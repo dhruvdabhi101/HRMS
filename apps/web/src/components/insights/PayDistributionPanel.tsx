@@ -1,10 +1,6 @@
 "use client";
 
-import type {
-	EmployeeDetail,
-	PayDistributionQuery,
-	PayFilters,
-} from "@repo/shared";
+import type { PayDistributionQuery, PayFilters } from "@repo/shared";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import AlertMessage from "@repo/ui/general/AlertMessage";
 import LoadingButton from "@repo/ui/general/LoadingButton";
@@ -14,15 +10,9 @@ import { INSIGHT_KEYS, usePayDistribution } from "@/queries";
 import { PayDistributionResults } from "./PayDistributionResults.view";
 import { PayFiltersForm } from "./PayFiltersForm";
 
-export function PayDistributionPanel({
-	employee,
-}: {
-	employee?: EmployeeDetail;
-}) {
+export function PayDistributionPanel() {
 	const cache = useQueryClient();
 	const [query, setQuery] = useState<PayDistributionQuery>({
-		countryCode: employee?.countryCode,
-		employeeId: employee?.id,
 		page: 1,
 		pageSize: 25,
 	});
@@ -31,7 +21,6 @@ export function PayDistributionPanel({
 	const apply = (filters: PayFilters) => {
 		const next = {
 			...filters,
-			employeeId: employee?.id,
 			page: 1,
 			pageSize: query.pageSize,
 		};
@@ -42,18 +31,9 @@ export function PayDistributionPanel({
 		setQuery(next);
 	};
 	return (
-		<section
-			className="space-y-4"
-			aria-label={employee ? "Employee pay position" : "Pay distribution"}
-		>
-			<h2 className="text-xl font-semibold">
-				{employee ? "Pay position" : "Salary spread"}
-			</h2>
-			<PayFiltersForm
-				initialCountry={employee?.countryCode}
-				isLoading={loading}
-				onApply={apply}
-			/>
+		<section className="space-y-4" aria-label="Pay distribution">
+			<h2 className="text-xl font-semibold tracking-tight">Salary spread</h2>
+			<PayFiltersForm isLoading={loading} onApply={apply} />
 			<div aria-busy={loading}>
 				{loading ? (
 					<div className="space-y-3" role="status">

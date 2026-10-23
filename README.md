@@ -1,4 +1,4 @@
-# Heizen Master Template
+# HRMS
 
 A production-ready full-stack monorepo — **NestJS 11** + **Next.js 16** — with a shared UI kit, shadcn charts, and Prisma on SQLite. There is no authentication — every page and API route is public.
 
@@ -246,7 +246,3 @@ pnpm db:migrate   # create + apply a dev migration
 pnpm db:deploy    # apply migrations in production
 pnpm db:studio    # Prisma Studio GUI
 ```
-
----
-
-Built with ❤️ by [Heizen Studio](https://studio.heizen.work)

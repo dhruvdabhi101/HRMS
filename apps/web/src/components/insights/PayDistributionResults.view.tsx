@@ -42,7 +42,7 @@ export function PayDistributionResults({
 	report: PayDistributionResponse;
 	onPageChange: (page: number, pageSize: number) => void;
 }) {
-	const { summary, employee, outliers } = report;
+	const { summary, outliers } = report;
 	return (
 		<div className="space-y-4">
 			<p className="text-sm text-muted-foreground">
@@ -50,31 +50,9 @@ export function PayDistributionResults({
 				{summary
 					? ` · ${summary.headcount.toLocaleString("en-US")} employees`
 					: ""}
-				. An active employee is included in their comparison group when they
-				match the filters.
+				.
 			</p>
 			<PayFxBasis rates={report.fxRates} />
-			{employee && (
-				<div className="space-y-2">
-					<p className="font-medium">
-						{employee.name}:{" "}
-						{formatEmployeeMoney(employee.annualBaseUsd, "USD")}
-					</p>
-					{!employee.includedInCohort ? (
-						<AlertMessage
-							message={
-								employee.status === "terminated"
-									? "This employee is terminated and excluded from the active comparison group. Their current salary marker remains visible."
-									: "This employee does not match the selected filters and is excluded from the group statistics. Their salary marker remains visible."
-							}
-						/>
-					) : (
-						employee.isOutlier && (
-							<AlertMessage message="This employee's annual base is an outlier in the selected group under the 1.5-IQR rule." />
-						)
-					)}
-				</div>
-			)}
 			{!summary ? (
 				<Empty>
 					<EmptyHeader>
@@ -89,11 +67,7 @@ export function PayDistributionResults({
 					{summary.smallSample && (
 						<AlertMessage message="Fewer than four employees: summary values are shown, but outlier labels are suppressed." />
 					)}
-					<PayBoxPlot
-						summary={summary}
-						employee={employee}
-						outliers={outliers.items}
-					/>
+					<PayBoxPlot summary={summary} outliers={outliers.items} />
 					{!summary.smallSample && (
 						<section className="space-y-3">
 							<h3 className="font-medium">

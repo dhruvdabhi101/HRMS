@@ -22,8 +22,8 @@ async function bootstrap() {
 	app.useLogger(app.get(Logger));
 
 	const swaggerConfig = new DocumentBuilder()
-		.setTitle("Heizen Template API")
-		.setDescription("Heizen Template API Documentation")
+		.setTitle("HRMS API")
+		.setDescription("HRMS API documentation")
 		.setVersion("1.0")
 		.build();
 

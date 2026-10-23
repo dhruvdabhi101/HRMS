@@ -3,7 +3,7 @@ import type {
 	PayFilters,
 	PayGroupsQuery,
 } from "@repo/shared";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { InsightsService } from "@/services";
 
 export const INSIGHT_KEYS = {
@@ -25,6 +25,7 @@ export function usePayDistribution(query: PayDistributionQuery) {
 	return useQuery({
 		queryKey: INSIGHT_KEYS.distribution(query),
 		queryFn: () => InsightsService.distribution(query),
+		placeholderData: keepPreviousData,
 		refetchOnMount: "always",
 	});
 }

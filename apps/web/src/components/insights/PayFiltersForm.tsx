@@ -13,11 +13,9 @@ import { type PayFilterValues, payFiltersSchema } from "@/validations";
 import { PayExplorerField } from "./PayExplorerField";
 
 export function PayFiltersForm({
-	initialCountry,
 	isLoading,
 	onApply,
 }: {
-	initialCountry?: PayFilters["countryCode"];
 	isLoading: boolean;
 	onApply: (filters: PayFilters) => void;
 }) {
@@ -25,7 +23,7 @@ export function PayFiltersForm({
 	const form = useForm<PayFilterValues>({
 		resolver: zodResolver(payFiltersSchema),
 		defaultValues: {
-			countryCode: initialCountry ?? "",
+			countryCode: "",
 			department: "",
 			jobTitle: "",
 			level: "",

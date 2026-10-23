@@ -182,3 +182,16 @@ where do they lie actually on pay.. so will give all the filters
 ## Prompt 18
 
 continue...
+
+## Prompt 19
+
+/apple-design to improve the design
+
+and remove heizen branding from the code everywhere.. and lets say HRMS instead
+one issue that i found is. for any employee there are some options which is not correct and in that case we are showing them some error..
+instead how about we show options that are available for that user..  and just show simple small payboxplot in compansation box only.. and we don't want to show the list of outliers.. because why does outliers matter to any employee where we are only focused on single employee.
+so no filters are required at this point.
+
+also use /apple-design  to improve the design
+
+and remove heizen branding from the code everywhere.. and lets say HRMS instead

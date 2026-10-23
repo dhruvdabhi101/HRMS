@@ -1,1 +1,1 @@
-export const APP_NAME = "Heizen";
+export const APP_NAME = "HRMS";

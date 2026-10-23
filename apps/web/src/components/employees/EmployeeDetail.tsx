@@ -6,12 +6,12 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import AlertMessage from "@repo/ui/general/AlertMessage";
 import LoadingButton from "@repo/ui/general/LoadingButton";
 import Link from "next/link";
-import { PayDistributionPanel } from "@/components/insights/PayDistributionPanel";
 import { useBreadcrumbLabel } from "@/hooks/use-breadcrumb-label";
 import { ApiError } from "@/lib/api-error";
 import { useEmployee } from "@/queries";
 import { CompensationHistoryView } from "./CompensationHistory.view";
 import { EmployeeForm } from "./EmployeeForm";
+import { EmployeePayPosition } from "./EmployeePayPosition";
 import { EmployeeSummaryView } from "./EmployeeSummary.view";
 import { TerminateEmployee } from "./TerminateEmployee";
 
@@ -84,7 +84,10 @@ export function EmployeeDetail({
 
 	return (
 		<div className="space-y-6">
-			<EmployeeSummaryView employee={data} />
+			<EmployeeSummaryView
+				employee={data}
+				payPosition={<EmployeePayPosition key={data.id} employee={data} />}
+			/>
 			{data.status === "active" ? (
 				<div className="flex flex-wrap gap-3">
 					<Link
@@ -98,7 +101,6 @@ export function EmployeeDetail({
 			) : (
 				<AlertMessage message="This employee is terminated. Their record and compensation history are read-only." />
 			)}
-			<PayDistributionPanel key={data.id} employee={data} />
 			<CompensationHistoryView changes={data.compensationChanges} />
 			<Link
 				href="/employees/new"

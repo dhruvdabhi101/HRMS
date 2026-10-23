@@ -9,13 +9,7 @@ import {
 	SidebarMenuItem,
 	SidebarRail,
 } from "@repo/ui/components/sidebar";
-import {
-	BarChart3,
-	BookOpen,
-	GalleryVerticalEnd,
-	Home,
-	UserPlus,
-} from "lucide-react";
+import { BarChart3, BookOpen, Home, UserPlus, UsersRound } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { APP_NAME } from "@/constants";
@@ -58,11 +52,13 @@ export function AppSidebar() {
 					<SidebarMenuItem>
 						<SidebarMenuButton size="lg">
 							<div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-								<GalleryVerticalEnd className="size-4" />
+								<UsersRound className="size-4" />
 							</div>
 							<div className="flex flex-col gap-0.5 leading-none">
-								<span className="font-medium">{APP_NAME}</span>
-								<span className="">heizen.work</span>
+								<span className="font-semibold tracking-tight">{APP_NAME}</span>
+								<span className="text-xs text-muted-foreground">
+									Salary management
+								</span>
 							</div>
 						</SidebarMenuButton>
 					</SidebarMenuItem>
