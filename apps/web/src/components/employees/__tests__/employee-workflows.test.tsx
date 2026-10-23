@@ -80,6 +80,25 @@ describe("employee workflow regressions", () => {
 		expect((screen.getByLabelText(/Annual base salary/) as HTMLInputElement).value).toBe("2000.00");
 	});
 
+	it("keeps a successful save when an older detail request finishes afterward", async () => {
+		const read = deferred<EmployeeDetail>();
+		const write = deferred<EmployeeDetail>();
+		vi.mocked(EmployeesService.get).mockReturnValue(read.promise);
+		vi.mocked(EmployeesService.update).mockReturnValue(write.promise);
+		cache.setQueryData(EMPLOYEE_KEYS.detail(employee.id), employee, { updatedAt: Date.now() - 120_000 });
+		const mutation = renderHook(() => useUpdateEmployee(), { wrapper });
+		act(() => mutation.result.current.mutate({ id: employee.id, input: { annualBaseMinor: 200_000 } }));
+		await waitFor(() => expect(EmployeesService.update).toHaveBeenCalledTimes(1));
+		mutation.unmount();
+		const detail = renderHook(() => useEmployee(employee.id), { wrapper });
+		await waitFor(() => expect(EmployeesService.get).toHaveBeenCalledTimes(1));
+		await act(async () => { write.resolve(updated); await write.promise; });
+		await waitFor(() => expect(detail.result.current.data?.annualBaseMinor).toBe(200_000));
+		await act(async () => { read.resolve(employee); await read.promise; });
+		await waitFor(() => expect(detail.result.current.isFetching).toBe(false));
+		expect(detail.result.current.data).toEqual(updated);
+	});
+
 	it("sends only changed profile fields if compensation changes while a draft is open", async () => {
 		vi.mocked(EmployeesService.update).mockResolvedValue(updated);
 		const form = renderHook(({ current }) => useEmployeeForm(current), { wrapper, initialProps: { current: employee } });
