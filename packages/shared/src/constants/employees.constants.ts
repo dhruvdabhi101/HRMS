@@ -13,6 +13,13 @@ export const EMPLOYEE_GENDERS = [
 	"non_binary",
 	"undisclosed",
 ] as const;
+export const EMPLOYEE_SORT_FIELDS = [
+	"name",
+	"countryCode",
+	"department",
+	"jobTitle",
+	"level",
+] as const;
 export const EMPLOYEE_LIMITS = {
 	name: 120,
 	department: 100,

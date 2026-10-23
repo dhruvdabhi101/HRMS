@@ -114,3 +114,16 @@ https://react.dev/link/hydration-mismatch
 
 
 and another one was.. when clicked on documentation tab.. it was overlapping with dashboard, add employee tab.. so some issue with UI most prob.
+
+## Prompt 8
+
+ohh.. the issue is with the text length of the docs.. otherwise its fine. 
+We'll keep names properly going forwards in the docs.. 
+lets move to next step in plan. 
+in that we'll need good grid solutions.. I've ag-grid in mind..also see if shadcn grid/tables are enough for our usecase. 
+tanstack tables are also good.. 
+lets give me a comparison table for each 3 and i'll make decision based on these on our usecase
+
+## Prompt 9
+
+yes go with shadcn + TanStack through our existing [CustomTable.tsx](packages/ui/src/general/CustomTable.tsx)
