@@ -41,6 +41,9 @@ describe("employee directory URL state", () => {
 		await act(async () => { await result.current.changeFilter({ level: "L2" }); });
 		expect(result.current.query).toMatchObject({ page: 1, pageSize: 100, countryCode: "CA", level: "L2", sortBy: "level", sortDirection: "desc" });
 		expect(new URLSearchParams(savedUrl()).has("page")).toBe(false);
+		await act(async () => { await result.current.changeFilter({ countryCode: undefined }); });
+		expect(result.current.query.countryCode).toBeUndefined();
+		expect(new URLSearchParams(savedUrl()).has("countryCode")).toBe(false);
 	});
 
 	it("clears filters while preserving page size, sorting, and unrelated URL parameters", async () => {

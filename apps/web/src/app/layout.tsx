@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "@repo/ui/globals.css";
 import { APP_NAME } from "@/constants";
 import { dmSans } from "@/lib/fonts";
@@ -17,7 +18,9 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body className={`${dmSans.className} antialiased`}>
-				<Providers>{children}</Providers>
+				<NuqsAdapter>
+					<Providers>{children}</Providers>
+				</NuqsAdapter>
 			</body>
 		</html>
 	);

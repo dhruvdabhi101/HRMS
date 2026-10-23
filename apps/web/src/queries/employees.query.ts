@@ -34,8 +34,9 @@ export function useCreateEmployee() {
 	return useEmployeeMutation(EmployeesService.create);
 }
 
-export function useEmployees(query: EmployeeDirectoryQuery) {
+export function useEmployees(query: EmployeeDirectoryQuery, enabled = true) {
 	return useQuery({
+		enabled,
 		queryKey: EMPLOYEE_KEYS.list(query),
 		queryFn: () => EmployeesService.list(query),
 	});

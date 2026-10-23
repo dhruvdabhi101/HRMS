@@ -29,7 +29,7 @@ export function EmployeeDirectory() {
 	} = useEmployeeDirectory();
 	const { data, isLoading, isError, error, refetch } = employees;
 	return (
-		<PageContainer className="flex h-[calc(100dvh-4rem)] min-h-[36rem] min-w-0 flex-col gap-6">
+		<PageContainer className="flex h-[calc(100dvh-4rem)] min-h-[36rem] min-w-0 max-w-none flex-col gap-6">
 			<div className="flex flex-wrap items-center justify-between gap-3">
 				<div>
 					<h1 className="text-2xl font-semibold">Employees</h1>

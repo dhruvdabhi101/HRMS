@@ -2,49 +2,55 @@
 
 import type { EmployeeDirectoryQuery } from "@repo/shared";
 import type { SortingState } from "@tanstack/react-table";
+import { useQueryStates } from "nuqs";
 import { useEffect, useState } from "react";
+import { employeeDirectorySearchParams } from "@/lib/employee-directory-search-params";
 import { useEmployees } from "@/queries";
 
 export function useEmployeeDirectory() {
-	const [query, setQuery] = useState<EmployeeDirectoryQuery>({
-		page: 1,
-		pageSize: 25,
-		status: "active",
-		sortBy: "name",
-		sortDirection: "asc",
-	});
-	const [search, setSearch] = useState("");
+	const [urlQuery, setQuery] = useQueryStates(employeeDirectorySearchParams);
+	const search = urlQuery.search;
+	const [debouncedSearch, setDebouncedSearch] = useState(search.trim());
 	useEffect(() => {
-		const timer = setTimeout(
-			() =>
-				setQuery((current) =>
-					(current.search ?? "") === search.trim()
-						? current
-						: { ...current, search: search.trim(), page: 1 },
-				),
-			300,
-		);
+		const timer = setTimeout(() => setDebouncedSearch(search.trim()), 300);
 		return () => clearTimeout(timer);
 	}, [search]);
-	const employees = useEmployees(query);
+	const query: EmployeeDirectoryQuery = {
+		...urlQuery,
+		search: debouncedSearch || undefined,
+		countryCode: urlQuery.countryCode ?? undefined,
+		department: urlQuery.department ?? undefined,
+		jobTitle: urlQuery.jobTitle ?? undefined,
+		level: urlQuery.level ?? undefined,
+	};
+	const employees = useEmployees(query, search.trim() === debouncedSearch);
+	const setSearch = (value: string) =>
+		setQuery({ search: value || null, page: 1 });
 	const changeFilter = (filter: Partial<EmployeeDirectoryQuery>) =>
-		setQuery((current) => ({ ...current, ...filter, page: 1 }));
+		setQuery({
+			...Object.fromEntries(
+				Object.entries(filter).map(([key, value]) => [key, value ?? null]),
+			),
+			page: 1,
+		});
 	const changeSorting = (sorting: SortingState) =>
 		changeFilter({
 			sortBy: (sorting[0]?.id ?? "name") as EmployeeDirectoryQuery["sortBy"],
 			sortDirection: sorting[0]?.desc ? "desc" : "asc",
 		});
 	const changePage = (page: number, pageSize: number) =>
-		setQuery((current) => ({ ...current, page, pageSize }));
+		setQuery({ page, pageSize });
 	const clearFilters = () => {
-		setSearch("");
-		setQuery((current) => ({
+		setDebouncedSearch("");
+		return setQuery({
 			page: 1,
-			pageSize: current.pageSize,
-			status: "active",
-			sortBy: current.sortBy,
-			sortDirection: current.sortDirection,
-		}));
+			search: null,
+			countryCode: null,
+			department: null,
+			jobTitle: null,
+			level: null,
+			status: null,
+		});
 	};
 	return {
 		query,
