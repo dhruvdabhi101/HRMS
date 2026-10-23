@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@repo/ui/components/button";
+import { Button, buttonVariants } from "@repo/ui/components/button";
 import { Empty, EmptyHeader, EmptyTitle } from "@repo/ui/components/empty";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import AlertMessage from "@repo/ui/general/AlertMessage";
@@ -44,7 +44,9 @@ export function EmployeeDetail({ employeeId }: { employeeId: string }) {
 						</Button>
 					</>
 				)}
-				<Button render={<Link href="/employees/new" />}>Add employee</Button>
+				<Link href="/employees/new" className={buttonVariants()}>
+					Add employee
+				</Link>
 			</div>
 		);
 	if (!data)
@@ -59,9 +61,12 @@ export function EmployeeDetail({ employeeId }: { employeeId: string }) {
 		<div className="space-y-6">
 			<EmployeeSummaryView employee={data} />
 			<CompensationHistoryView changes={data.compensationChanges} />
-			<Button variant="outline" render={<Link href="/employees/new" />}>
+			<Link
+				href="/employees/new"
+				className={buttonVariants({ variant: "outline" })}
+			>
 				Add another employee
-			</Button>
+			</Link>
 		</div>
 	);
 }

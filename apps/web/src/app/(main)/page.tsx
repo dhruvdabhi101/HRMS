@@ -1,4 +1,4 @@
-import { Button } from "@repo/ui/components/button";
+import { buttonVariants } from "@repo/ui/components/button";
 import { PageContainer } from "@repo/ui/general/PageContainer";
 import Link from "next/link";
 
@@ -9,7 +9,9 @@ export default function HomePage() {
 			<p className="text-muted-foreground">
 				Add employees and keep a record of their starting compensation.
 			</p>
-			<Button render={<Link href="/employees/new" />}>Add employee</Button>
+			<Link href="/employees/new" className={buttonVariants()}>
+				Add employee
+			</Link>
 		</PageContainer>
 	);
 }

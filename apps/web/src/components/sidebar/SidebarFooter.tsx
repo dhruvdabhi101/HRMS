@@ -12,6 +12,9 @@ import {
 } from "@repo/ui/components/sidebar";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useSyncExternalStore } from "react";
+
+const noopSubscribe = () => () => {};
 
 const THEME_OPTIONS = [
 	{ value: "light", label: "Light", icon: Sun },
@@ -21,8 +24,15 @@ const THEME_OPTIONS = [
 
 const SidebarFooter = () => {
 	const { theme, setTheme } = useTheme();
+	const isHydrated = useSyncExternalStore(
+		noopSubscribe,
+		() => true,
+		() => false,
+	);
 	const currentTheme =
-		THEME_OPTIONS.find((option) => option.value === theme) ?? THEME_OPTIONS[0];
+		THEME_OPTIONS.find(
+			(option) => option.value === (isHydrated ? theme : "system"),
+		) ?? THEME_OPTIONS[2];
 
 	return (
 		<CnSidebarFooter>
@@ -49,7 +59,7 @@ const SidebarFooter = () => {
 								>
 									<Icon className="h-4 w-4" />
 									<span>{label}</span>
-									{theme === value && (
+									{isHydrated && theme === value && (
 										<div className="bg-primary ml-auto h-2 w-2 rounded-full" />
 									)}
 								</DropdownMenuItem>
