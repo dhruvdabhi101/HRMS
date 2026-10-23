@@ -18,18 +18,18 @@ Use unit tests for isolated business calculations and integration tests with iso
 
 ## 1. Settle product and calculation rules
 
-These are proposed defaults to confirm before implementing dependent behavior, not decisions already agreed.
+V1 decisions and worked acceptance examples are recorded in [PRODUCT_RULES.md](PRODUCT_RULES.md). These rules are defined; implementation and executable verification remain in the later steps.
 
-- [ ] Define comparison metrics: annual base salary for min, median, average, max, and distributions; base plus target bonus for annual target compensation (the proposed meaning of total cost, excluding employer taxes and benefits).
-- [ ] Define country/currency mapping, supported currencies, FX direction and fixed rate date, precision, and rounding. Proposed storage: integer minor units for money and basis points for bonus percentages.
-- [ ] Define valid salary and bonus ranges and required employee fields.
-- [ ] Define salary history: proposed initial compensation entry, old/new base and bonus values on changes, no history entry for an unchanged save, and currency context preserved for historical values.
-- [ ] Define directory defaults for active/terminated employees and whether terminated records can be edited; insights always exclude terminated employees.
-- [ ] Define distribution groups and outlier calculation, including small-group behavior; proposed rule: 1.5 times the interquartile range, with a stated quartile convention.
-- [ ] Define gender comparison groups, percentage formula/reference, missing or undisclosed gender handling, and empty/zero-reference behavior. Show group sizes and allow country/department filters; level alone does not control for geography or role.
-- [ ] Define the 300 ms list target's measurement boundary, environment, representative queries, and repeated-run reporting.
+- [x] Define comparison metrics: annual base for comparison statistics; annual target compensation includes target bonus and excludes employer taxes/benefits.
+- [x] Define five supported country/currency pairs, synthetic fixed FX rates/date, integer storage, precision, and rounding.
+- [x] Define required employee fields, salary/bonus limits, supported levels, gender values, and date validation.
+- [x] Define initial history, complete compensation snapshots, unchanged saves, currency changes, and transactional updates.
+- [x] Define active-by-default directory visibility, read-only terminated employees, repeatable termination, and active-only insights.
+- [x] Define distribution filters, continuous interpolated quartiles, strict 1.5-IQR fences, and small-group behavior.
+- [x] Define gender groups, gap formula/reference, missing/zero-reference behavior, counts, and small-sample notes.
+- [x] Define API/UI performance boundaries, environment, query cases, sample counts, and percentile reporting.
 
-Verification: each agreed rule has an unambiguous example that can become a test or manual acceptance check.
+Verification: each rule has a concrete expected-result example in PRODUCT_RULES.md. Runtime tests and performance measurements have not yet been performed.
 
 ## 2. Data foundation and repeatable seed
 

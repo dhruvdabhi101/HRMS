@@ -1,3 +1,10 @@
+## User prompt log
+
+- From the start of prompt logging onward, append each new user-authored prompt to [docs/PROMPTS.md](docs/PROMPTS.md) before working on it, including follow-ups, corrections, and discussion-only prompts.
+- Keep entries chronological with sequential numbers. Preserve the user's wording and formatting verbatim; do not summarize or silently rewrite previous entries.
+- Log each prompt once. Do not backfill older conversation history or include assistant replies, tool output, or automatically injected instructions/context.
+- Never store secrets or real employee personal/salary data in the log. Replace such values with `[REDACTED]` and note the redaction.
+
 ## Skills
 
 This project has the following agent skills. **Read and follow the relevant skill before starting any task in that area.**

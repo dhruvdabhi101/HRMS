@@ -1,6 +1,6 @@
 # Database diagram
 
-Proposed SQLite model for [the requirements](REQUIREMENTS.md). Field names and storage choices are design proposals until implemented; open calculation rules are tracked in [the plan](PLAN.md#1-settle-product-and-calculation-rules).
+Proposed SQLite model for [the requirements](REQUIREMENTS.md). V1 field semantics and calculation rules are defined in [PRODUCT_RULES.md](PRODUCT_RULES.md); the schema itself is not yet implemented.
 
 ```mermaid
 erDiagram
@@ -14,7 +14,7 @@ erDiagram
         string department
         string jobTitle
         string level
-        string gender "Including undisclosed; values TBD"
+        string gender "woman, man, non_binary, undisclosed"
         datetime hireDate
         string status "active or terminated"
         string currencyCode FK
@@ -38,15 +38,15 @@ erDiagram
 
     FxRate {
         string currencyCode PK "ISO currency code"
-        number rateToUsd "USD per local major unit; storage TBD"
+        int usdRateMicros "USD per local major unit times 1000000"
         datetime asOfDate "Fixed reference date"
     }
 ```
 
 - Current compensation lives on Employee. Bonus amounts and USD compensation are derived rather than stored.
-- The server validates country/currency mapping and controlled department, title, and level values. Separate management tables are not proposed for v1.
-- Updating compensation and appending history happen in one database transaction. An unchanged save adds no history entry; an initial entry with null previous values is proposed.
+- The server validates country/currency mapping and required department/title text and supported level values. Separate management tables are not proposed for v1.
+- Updating compensation and appending history happen in one database transaction. An unchanged save adds no history entry; creation adds an initial entry with null previous values.
 - History stores old/new currency snapshots alongside amounts so a later currency change cannot relabel past pay. Currency snapshot fields do not reference mutable FX rates.
 - Termination changes employee status; employee and history records remain. Insights exclude terminated employees.
-- The diagram describes compensation history, not a general audit trail for profile edits. FX precision, rounding, and currency-change rules must be settled before implementation.
+- The diagram describes compensation history, not a general audit trail for profile edits. FX precision, rounding, and explicit compensation on currency changes follow PRODUCT_RULES.md.
 - Indexes should support measured directory queries and history retrieval by employee/time; they are not all shown in this logical diagram.
