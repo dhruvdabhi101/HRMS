@@ -1,0 +1,44 @@
+{
+	"name": "master-template",
+	"private": true,
+	"version": "1.0.0",
+	"scripts": {
+		"build": "turbo run build",
+		"start": "turbo run start",
+		"dev": "turbo run dev",
+		"prepare": "lefthook install",
+		"ready": "pnpm db:generate && pnpm lint:fix && pnpm typecheck",
+		"db:generate": "turbo run db:generate",
+		"db:migrate": "turbo run db:migrate",
+		"db:deploy": "turbo run db:deploy",
+		"lint": "biome check",
+		"lint:fix": "biome check --write",
+		"format": "biome format --write",
+		"gitleaks": "node scripts/gitleaks.mjs",
+		"doctor": "react-doctor -y",
+		"doctor:staged": "react-doctor --staged --blocking error -y",
+		"typecheck": "turbo run typecheck",
+		"package": "turbo run package",
+		"test": "turbo run test",
+		"test:watch": "turbo run test:watch",
+		"test:cov": "turbo run test:cov",
+		"clean": "rm -rf node_modules apps/*/node_modules packages/*/node_modules"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.4.16",
+		"lefthook": "^2.1.10",
+		"react-doctor": "0.9.14",
+		"turbo": "^2.10.4",
+		"typescript": "catalog:"
+	},
+	"packageManager": "pnpm@11.5.0",
+	"engines": {
+		"node": ">=22"
+	},
+	"dependencies": {
+		"@tanstack/markdown": "^0.0.13",
+		"axios": "^1.20.0",
+		"sonner": "^2.0.7",
+		"zod": "^4.4.3"
+	}
+}

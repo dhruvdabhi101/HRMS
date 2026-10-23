@@ -1,0 +1,19 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+allowBuilds:
+  '@prisma/engines': false
+  '@scarf/scarf': false
+  '@swc/core': false
+  better-sqlite3: true
+  esbuild: false
+  lefthook: false
+  msgpackr-extract: false
+  prisma: false
+  sharp: true
+  unrs-resolver: false
+catalog:
+  typescript: '^5.9.3'
+overrides:
+  deepmerge-ts@<8.0.0: ^8.0.0
+  mysql2@<3.22.0: ^3.22.0

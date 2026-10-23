@@ -1,0 +1,7 @@
+{
+	"$schema": "https://react.doctor/schema/config.json",
+	"projects": ["web", "@repo/ui"],
+	"ignore": {
+		"files": ["packages/db/generated/**"]
+	}
+}

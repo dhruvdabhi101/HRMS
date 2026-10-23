@@ -1,0 +1,25 @@
+pre-commit:
+  piped: true
+  commands:
+    # Cheap, and a leaked secret should stop the commit before anything else runs.
+    gitleaks:
+      priority: 1
+      run: pnpm gitleaks git --pre-commit --staged --redact --verbose
+    package:
+      run: pnpm package
+    parallel-checks:
+      run: pnpm lefthook run parallel-checks
+
+parallel-checks:
+  parallel: true
+  commands:
+    lint:fix:
+      run: pnpm lint:fix
+    test:
+      run: pnpm test
+    typecheck:
+      run: pnpm typecheck
+    # Staged files only. Blocks on errors, not warnings: the template's own UI code
+    # carries warnings, which would otherwise block the first edit to those files.
+    doctor:
+      run: pnpm doctor:staged
