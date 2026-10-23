@@ -1,3 +1,7 @@
+---
+navTitle: Requirements
+---
+
 # ACME Salary Management: Requirements
 
 ## Problem
@@ -45,6 +49,8 @@ A single HR manager. No other roles.
 | **Live FX rates** | They add an external dependency and make numbers drift from day to day. A static rate table keeps reports reproducible. |
 | **Bulk raises / comp-cycle tooling** | This changes pay rather than explaining it. It needs previews, approvals and rollback, which is out of proportion for v1. |
 | **Salary bands & compa-ratio** | The insights describe what we pay, not what we should pay. Bands would need their own management UI and policy decisions. |
+| **Rehire / reactivate terminated employees** | Deliberately excluded from v1. Terminated records and compensation history remain readable, but there is no rehire action or transition back to active status. Employment episodes and rehire policies need a separate workflow. |
+| **Future hires / future joining dates** | Deliberately excluded from v1. Hire dates must be today or earlier in UTC; employees are active immediately on creation. Scheduled joining and automatic activation need a separate workflow. |
 
 ## Assumptions
 - Employee and salary data are the source of truth in this app. There is no payroll or HRIS integration.

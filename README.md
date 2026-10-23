@@ -45,6 +45,17 @@ the running app at `/docs`, with the sidebar generated from the folder: folders 
 sections, and a new Markdown file appears on its own with no code change. The pages that ship
 with the template are meant to be tailored to the product.
 
+Documentation Markdown can set `navTitle: Requirements` in frontmatter to use a short sidebar/header label while keeping the full page title. Long navigation labels truncate with their complete text available on hover.
+
+Architecture and database diagrams are rendered SVGs embedded in their Markdown pages. Editable Mermaid sources and generated images live in `apps/web/public/diagrams/`; the documentation viewer resolves repository-relative image links to their public URLs. Regenerate an image after editing its source with the [Mermaid CLI](https://github.com/mermaid-js/mermaid-cli):
+
+```bash
+pnpm --package=@mermaid-js/mermaid-cli@12.0.0 dlx mmdc -i apps/web/public/diagrams/architecture.mmd -o apps/web/public/diagrams/architecture.svg -t neutral -b white
+pnpm --package=@mermaid-js/mermaid-cli@12.0.0 dlx mmdc -i apps/web/public/diagrams/database.mmd -o apps/web/public/diagrams/database.svg -t neutral -b white
+```
+
+The CLI needs Chrome/Chromium. Set `PUPPETEER_EXECUTABLE_PATH` to an installed browser executable if Puppeteer's browser is unavailable. The application serves the checked-in SVGs and does not require Mermaid or a browser installation at runtime.
+
 ---
 
 ## Setup

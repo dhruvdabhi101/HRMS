@@ -1,0 +1,44 @@
+flowchart TB
+    subgraph Browser["HR manager's browser"]
+        UI["React UI<br/>Directory, employee forms, history, insights"]
+        Query["TanStack Query hooks"]
+        Service["Frontend service layer"]
+        Client["ApiClient"]
+        UI --> Query --> Service --> Client
+    end
+
+    subgraph VPS["Hostinger VPS"]
+        Caddy["Caddy<br/>HTTPS termination and reverse proxy"]
+        Next["Next.js process<br/>App Router and UI delivery"]
+
+        subgraph Server["NestJS process · /api prefix"]
+            Controllers["Controllers and DTO validation"]
+            Employees["Employee service<br/>CRUD, termination, compensation history"]
+            Export["CSV export<br/>Shared directory filter logic"]
+            Insights["Insights queries<br/>Grouping, distribution, gender comparisons"]
+            Prisma["Prisma client / SQLite adapter<br/>Parameterized SQL for reporting"]
+            Controllers --> Employees
+            Controllers --> Export
+            Controllers --> Insights
+            Employees --> Prisma
+            Export --> Prisma
+            Insights --> Prisma
+        end
+
+        subgraph Disk["Persistent disk"]
+            DB[("SQLite database<br/>Employee · CompensationChange · FxRate")]
+        end
+
+        Setup["Migration and seed commands"]
+        Backup["Backup procedure<br/>Consistent SQLite snapshot"]
+
+        Caddy -->|"Page requests"| Next
+        Caddy -->|"/api/* · preserve prefix"| Controllers
+        Prisma <-->|"Reads, writes, transactions, SQL aggregates"| DB
+        Setup --> DB
+        DB -.-> Backup
+    end
+
+    UI -->|"HTTPS page requests"| Caddy
+    Client <-->|"HTTPS · JSON and CSV · same origin"| Caddy
+    Next -->|"Pages and UI assets via Caddy"| UI

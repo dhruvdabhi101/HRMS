@@ -1,6 +1,12 @@
+---
+navTitle: Implementation plan
+---
+
 # ACME Salary Management: Implementation Plan
 
 Scope and exclusions are defined in [REQUIREMENTS.md](REQUIREMENTS.md). Build in small, demonstrable slices, using TDD primarily on the server. Check items only after verification; this plan does not mark implementation as complete.
+
+Rehire/reactivation of terminated employees and future hires/future joining dates are deliberately excluded from v1. Terminated records stay read-only; creation activates an employee immediately and accepts only a hire date on or before the current UTC date. No scheduled activation or rehire workflow is planned in these steps.
 
 Design references: [database diagram](DATABASE.md) and [application architecture](ARCHITECTURE.md). Deployment uses Caddy as the reverse proxy.
 

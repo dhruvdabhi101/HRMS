@@ -102,12 +102,6 @@ export function EmployeeDetail({
 				<AlertMessage message="This employee is terminated. Their record and compensation history are read-only." />
 			)}
 			<CompensationHistoryView changes={data.compensationChanges} />
-			<Link
-				href="/employees/new"
-				className={buttonVariants({ variant: "outline" })}
-			>
-				Add another employee
-			</Link>
 		</div>
 	);
 }

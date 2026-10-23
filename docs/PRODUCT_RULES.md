@@ -1,3 +1,7 @@
+---
+navTitle: Product rules
+---
+
 # Product and calculation rules
 
 V1 decisions for [plan step 1](PLAN.md#1-settle-product-and-calculation-rules). These define expected behavior for later implementation and tests; they do not claim that features are implemented. Examples use synthetic employees and pay.

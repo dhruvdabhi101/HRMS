@@ -39,7 +39,12 @@ const components = {
 		if (!isImage(image) || !image.props.src)
 			return <p {...props}>{children}</p>;
 
-		return <GuideImage src={image.props.src} alt={image.props.alt} />;
+		return (
+			<GuideImage
+				src={image.props.src.replace(/^\.\.\/apps\/web\/public\//, "/")}
+				alt={image.props.alt}
+			/>
+		);
 	},
 } satisfies MarkdownComponents;
 

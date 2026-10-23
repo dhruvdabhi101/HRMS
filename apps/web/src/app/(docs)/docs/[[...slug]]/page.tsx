@@ -43,15 +43,20 @@ export default async function GuidePage({ params }: GuidePageProps) {
 
 	return (
 		<SidebarInset>
-			<header className="bg-background sticky top-0 z-10 flex h-16 items-center gap-2 border-b px-4">
-				<SidebarTrigger className="-ml-1" />
-				<Separator orientation="vertical" className="mr-2 my-auto h-4" />
-				<span className="text-sm font-medium">{page.title}</span>
+			<header className="bg-background sticky top-0 z-10 flex h-16 min-w-0 items-center gap-2 border-b px-4">
+				<SidebarTrigger className="-ml-1 shrink-0" />
+				<Separator
+					orientation="vertical"
+					className="mr-2 my-auto h-4 shrink-0"
+				/>
+				<span className="truncate text-sm font-medium" title={page.title}>
+					{page.navTitle ?? page.title}
+				</span>
 			</header>
 			<div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-12 px-6 py-10 lg:grid-cols-[minmax(0,1fr)_14rem] lg:px-10">
 				<article className="min-w-0 max-w-3xl">
 					<header className="mb-8 border-b pb-8">
-						<h1 className="text-4xl font-semibold tracking-tight">
+						<h1 className="text-3xl font-semibold tracking-tight text-balance sm:text-4xl">
 							{page.title}
 						</h1>
 						{page.description && (

@@ -38,8 +38,16 @@ function GuideNavNode({
 			<SidebarMenuItem>
 				<SidebarMenuButton
 					isActive={isActive}
-					className="data-[active=true]:font-medium"
-					render={<Link href={item.href}>{item.title}</Link>}
+					className="min-w-0 data-[active=true]:font-medium"
+					render={
+						<Link
+							href={item.href}
+							title={item.title}
+							aria-current={isActive ? "page" : undefined}
+						>
+							<span>{item.title}</span>
+						</Link>
+					}
 				/>
 			</SidebarMenuItem>
 		);
@@ -51,10 +59,16 @@ function GuideNavNode({
 				<div className="flex items-center gap-0.5">
 					<SidebarMenuButton
 						isActive={isActive}
-						className="data-[active=true]:font-medium"
+						className="min-w-0 flex-1 data-[active=true]:font-medium"
 						render={
 							item.hasPage ? (
-								<Link href={item.href}>{item.title}</Link>
+								<Link
+									href={item.href}
+									title={item.title}
+									aria-current={isActive ? "page" : undefined}
+								>
+									<span>{item.title}</span>
+								</Link>
 							) : (
 								<span>{item.title}</span>
 							)
@@ -64,7 +78,7 @@ function GuideNavNode({
 						aria-label={`Toggle ${item.title}`}
 						className="group/trigger text-sidebar-foreground/60 hover:text-sidebar-foreground flex size-6 shrink-0 items-center justify-center rounded-sm"
 					>
-						<ChevronRight className="size-3.5 transition-transform group-data-[panel-open]/trigger:rotate-90" />
+						<ChevronRight className="size-3.5 transition-transform group-data-[panel-open]/trigger:rotate-90 motion-reduce:transition-none" />
 					</CollapsibleTrigger>
 				</div>
 				<CollapsibleContent>
@@ -84,7 +98,7 @@ export function GuideSidebar({ nav }: { nav: GuideNavItem[] }) {
 
 	return (
 		<Sidebar>
-			<SidebarHeader>
+			<SidebarHeader className="border-b border-sidebar-border p-3">
 				<SidebarMenu>
 					<SidebarMenuItem>
 						<SidebarMenuButton
@@ -94,12 +108,12 @@ export function GuideSidebar({ nav }: { nav: GuideNavItem[] }) {
 									<div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center">
 										<BookOpen className="size-4" />
 									</div>
-									<div className="flex flex-col gap-0.5 leading-none">
-										<span className="text-xs font-semibold tracking-wide uppercase">
+									<div className="flex min-w-0 flex-col gap-1 leading-none">
+										<span className="text-sm font-semibold tracking-tight">
 											{APP_NAME}
 										</span>
-										<span className="text-sidebar-foreground/60 text-[10px]">
-											User guide
+										<span className="text-sidebar-foreground/70 text-xs">
+											Documentation
 										</span>
 									</div>
 								</Link>

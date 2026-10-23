@@ -15,6 +15,7 @@ export type GuidePage = {
 	slug: string[];
 	href: string;
 	title: string;
+	navTitle?: string;
 	description?: string;
 	order: number;
 	document: MarkdownDocument;
@@ -81,6 +82,7 @@ const toPage = (
 			firstHeading(document) ??
 			titleFromSlug(slug.at(-1) ?? "Guide"),
 		description: frontmatter.description,
+		navTitle: frontmatter.navTitle,
 		order:
 			frontmatter.order ??
 			orderFromSegment(rawSegments.at(-1) ?? "") ??
@@ -154,7 +156,7 @@ export const getGuideNav = cache((): GuideNavItem[] => {
 		}
 
 		const item = ensure(page.slug);
-		item.title = page.title;
+		item.title = page.navTitle ?? page.title;
 		item.description = page.description;
 		item.hasPage = true;
 		orders.set(item.href, page.order);

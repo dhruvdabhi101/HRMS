@@ -1,5 +1,6 @@
 export type Frontmatter = {
 	title?: string;
+	navTitle?: string;
 	description?: string;
 	order?: number;
 };
@@ -20,6 +21,7 @@ export function parseFrontmatter(raw: string | undefined): Frontmatter {
 		if (!value) continue;
 
 		if (key === "title") result.title = value;
+		if (key === "navTitle") result.navTitle = value;
 		if (key === "description") result.description = value;
 		if (key === "order") {
 			const order = Number(value);

@@ -13,7 +13,7 @@ export function GuideImage({ src, alt }: { src: string; alt?: string }) {
 				type="button"
 				className="guide-figure-zoom"
 				onClick={() => setOpen(true)}
-				aria-label={alt ? `Enlarge: ${alt}` : "Enlarge screenshot"}
+				aria-label={alt ? `Enlarge: ${alt}` : "Enlarge image"}
 			>
 				{/* biome-ignore lint/performance/noImgElement: guide images are authored as plain markdown */}
 				<img src={src} alt={alt ?? ""} />
@@ -25,16 +25,26 @@ export function GuideImage({ src, alt }: { src: string; alt?: string }) {
 			{alt && <figcaption>{alt}</figcaption>}
 
 			<Dialog open={open} onOpenChange={setOpen}>
-				<DialogContent className="w-auto max-w-[96vw] gap-3 p-3 sm:max-w-[96vw]">
-					<DialogTitle className="pr-8 text-sm font-medium">
-						{alt ?? "Screenshot"}
+				<DialogContent className="flex max-h-[92dvh] w-[96vw] max-w-6xl flex-col gap-3 p-4 sm:max-w-6xl">
+					<DialogTitle className="shrink-0 pr-8 text-sm font-medium">
+						{alt ?? "Image"}
 					</DialogTitle>
-					{/* biome-ignore lint/performance/noImgElement: guide images are authored as plain markdown */}
-					<img
-						src={src}
-						alt={alt ?? ""}
-						className="max-h-[82vh] w-auto max-w-full rounded-lg border border-border object-contain"
-					/>
+					<div className="min-h-0 overflow-auto">
+						{/* biome-ignore lint/performance/noImgElement: guide images are authored as plain markdown */}
+						<img
+							src={src}
+							alt={alt ?? ""}
+							className="h-auto w-full rounded-lg border border-border"
+						/>
+					</div>
+					<a
+						href={src}
+						target="_blank"
+						rel="noopener noreferrer"
+						className="w-fit shrink-0 text-sm text-primary underline underline-offset-4"
+					>
+						Open full-size image (new tab)
+					</a>
 				</DialogContent>
 			</Dialog>
 		</figure>
