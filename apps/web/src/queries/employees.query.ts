@@ -1,6 +1,7 @@
 import type { EmployeeDetail, EmployeeDirectoryQuery } from "@repo/shared";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { EmployeesService } from "@/services";
+import { INSIGHT_KEYS } from "./insights.query";
 
 export const EMPLOYEE_KEYS = {
 	all: ["employees"] as const,
@@ -23,6 +24,7 @@ function useEmployeeMutation<Input>(
 				cache.setQueryData(queryKey, employee);
 				cache.invalidateQueries({ queryKey: EMPLOYEE_KEYS.lists });
 				cache.invalidateQueries({ queryKey: EMPLOYEE_KEYS.options });
+				cache.invalidateQueries({ queryKey: INSIGHT_KEYS.all });
 			});
 		},
 	});

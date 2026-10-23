@@ -35,7 +35,7 @@ describe("employee edits and termination", () => {
 		app.setGlobalPrefix("api");
 		app.useGlobalPipes(createValidationPipe());
 		app.useGlobalFilters(new GlobalExceptionFilter());
-		await app.listen(0);
+		await app.listen(0, "127.0.0.1");
 		employee = (await request(app.getHttpServer()).post("/api/employees").send(input).expect(201)).body;
 	});
 

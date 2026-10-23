@@ -34,7 +34,7 @@ describe("filtered employee CSV export", () => {
 		app.setGlobalPrefix("api");
 		app.useGlobalPipes(createValidationPipe());
 		app.useGlobalFilters(new GlobalExceptionFilter());
-		await app.listen(0);
+		await app.listen(0, "127.0.0.1");
 	});
 	afterEach(async () => { await app?.close(); await database?.close(); });
 

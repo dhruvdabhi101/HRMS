@@ -12,7 +12,7 @@ Design references: [database diagram](DATABASE.md) and [application architecture
 - [ ] Refactor with tests green; repeat for the next behavior.
 - [ ] Connect the UI and manually verify the affected workflow and applicable loading, empty, error, and validation states. No new automated UI tests for now.
 - [ ] Run relevant tests and `pnpm ready`; inspect the diff for unrelated changes.
-- [ ] Commit the completed behavior with a descriptive message. For steps 5–6, the user requested a separate failing test commit before implementation; keep later implementation commits passing.
+- [ ] Commit the completed behavior with a descriptive message. For steps 5–7, the user requested a separate failing test commit before implementation; keep later implementation commits passing.
 
 Use unit tests for isolated business calculations and integration tests with isolated SQLite databases for persistence, queries, and transactions. Prefer small fixtures with hand-calculated answers over the 10,000-row demo dataset. Avoid tests of framework wiring, trivial delegation, private implementation details, or coverage metrics alone.
 
@@ -130,14 +130,22 @@ The focused security source review found no confirmed boundary violations. Nativ
 
 ## 7. Group-by pay explorer
 
-- [ ] Write small SQLite fixtures with independently calculated headcount, min, median, average, max, and total compensation results.
-- [ ] Cover odd/even medians, one/two dimensions, mixed currencies, active-only inclusion, filters, and empty results.
-- [ ] Validate allowed dimensions/metrics and parameterize query values; never interpolate unchecked SQL identifiers.
-- [ ] Implement database-side aggregation and USD conversion, returning only the reporting data needed by the client.
-- [ ] Build dimension/metric controls, a result table, and an appropriate chart using existing shadcn chart components.
-- [ ] Manually answer the requirements' cross-country median and department cost questions; label base versus target compensation and fixed FX assumptions clearly.
+- [x] Write small SQLite fixtures with independently calculated headcount, min, median, average, max, and total compensation results.
+- [x] Cover odd/even medians, one/two dimensions, mixed currencies, active-only inclusion, filters, and empty results.
+- [x] Validate allowed dimensions/metrics and parameterize query values; never interpolate unchecked SQL identifiers.
+- [x] Implement database-side aggregation and USD conversion, returning only the reporting data needed by the client.
+- [x] Build dimension/metric controls, a result table, and an appropriate chart using existing shadcn chart components.
+- [x] Manually answer the requirements' cross-country median and department cost questions; label base versus target compensation and fixed FX assumptions clearly.
 
 Verification: SQL results match hand-calculated fixtures, and the UI answers both questions in a few interactions.
+
+Verified with 49 new isolated SQLite HTTP cases, committed first as `d608ec7`: all 49 failed on the missing endpoint while the existing 247 server tests passed. `GET /api/insights/groups` accepts one or two distinct allowlisted dimensions and one metric, with exact country/department/title/level filters. Reports always exclude terminated employees and compensation history. SQLite performs per-employee half-up local bonus/target and USD conversion, grouping, ranking for medians, and aggregation; the response contains group values in USD cents (or employee counts) and the current FX table/reference dates from the same read transaction. Invalid query identifiers/values and repeated parameters are rejected; string filter values remain bound parameters. Invalid FX rates fail explicitly.
+
+The `/insights` page provides controls, a sortable/paginated group table, and a shadcn/Recharts bar chart. For more than 20 groups, the chart explicitly shows the 20 largest values while the table includes every group. The UI labels annual base versus annual target compensation, active-only inclusion, and synthetic fixed FX assumptions/dates. Pending draft controls are identified until Update report applies them; duplicate dimensions show an inline validation error. Successful employee writes invalidate insights caches.
+
+Manual Chrome checks used a separate seven-employee synthetic SQLite fixture (six active, one terminated). L3 Engineering median base was USD 18,000 in India versus USD 110,000 in the US; annual target compensation totaled USD 296,000 for Engineering and USD 224,000 for Sales. Two-dimension department/country rows matched the hand-calculated subtotals. Verified table/chart rendering, empty selection, duplicate-dimension validation, loading skeletons and disabled submission during a delayed request, report/filter errors with the API unavailable, and successful retry after restoring it. The collaborative browser timed out twice, so these checks used native Chrome. No new automated UI tests were added. All 296 server tests and 23 frontend tests, `pnpm ready`, and both production builds passed. Deployment and step 8 remain deferred.
+
+Final verification exposed intermittent HTTP 401/404 responses from local test listeners. A standalone Node probe reproduced an IPv6 wildcard listener receiving an IPv4 response from a different local service (1 mismatch in 200 probes); Supertest rewrites wildcard IPv6 addresses to IPv4 loopback. All five HTTP fixtures now explicitly listen on `127.0.0.1` until teardown. The same 200-probe check then had zero mismatches, and three consecutive complete server-suite runs passed without weakening assertions. Temporary diagnostic logging, browser tabs, servers, and fixture data were removed.
 
 ## 8. Distribution and gender comparisons
 

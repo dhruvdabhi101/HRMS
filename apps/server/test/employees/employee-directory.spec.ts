@@ -31,7 +31,7 @@ describe("employee directory API", () => {
 		app.setGlobalPrefix("api");
 		app.useGlobalPipes(createValidationPipe());
 		app.useGlobalFilters(new GlobalExceptionFilter());
-		await app.init();
+		await app.listen(0, "127.0.0.1");
 	});
 
 	afterEach(async () => { await app?.close(); await database?.close(); });

@@ -29,7 +29,7 @@ describe("grouped pay insights", () => {
 		app.setGlobalPrefix("api");
 		app.useGlobalPipes(createValidationPipe());
 		app.useGlobalFilters(new GlobalExceptionFilter());
-		await app.listen(0);
+		await app.listen(0, "127.0.0.1");
 	});
 	afterEach(async () => { await app?.close(); await database?.close(); });
 
@@ -72,9 +72,10 @@ describe("grouped pay insights", () => {
 			{ ...base, countryCode: "CA", currencyCode: "CAD", annualBaseMinor: 10_025, bonusTargetBps: 0 },
 			{ ...base, countryCode: "CA", currencyCode: "CAD", annualBaseMinor: 10_025, bonusTargetBps: 0 },
 			{ ...base, annualBaseMinor: 10_005 },
+			{ ...base, countryCode: "CA", currencyCode: "CAD", annualBaseMinor: 1, bonusTargetBps: 10_000 },
 		] });
 		const { body } = await report({ dimensions: "department", metric: "totalTarget" }).expect(200);
-		expect(body.groups).toEqual([{ dimensions: { department: "Engineering" }, headcount: 3, value: 25_844 }]);
+		expect(body.groups).toEqual([{ dimensions: { department: "Engineering" }, headcount: 4, value: 25_845 }]);
 	});
 
 	it("normalizes all five supported currencies using the current fixed table with truthful reference dates", async () => {
