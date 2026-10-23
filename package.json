@@ -11,6 +11,7 @@
 		"db:generate": "turbo run db:generate",
 		"db:migrate": "turbo run db:migrate",
 		"db:deploy": "turbo run db:deploy",
+		"db:seed": "pnpm --filter server db:seed",
 		"lint": "biome check",
 		"lint:fix": "biome check --write",
 		"format": "biome format --write",

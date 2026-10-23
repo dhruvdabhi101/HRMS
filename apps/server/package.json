@@ -10,6 +10,7 @@
 		"start": "nest start",
 		"dev": "nest start --watch",
 		"start:prod": "node dist/main",
+		"db:seed": "ts-node -r tsconfig-paths/register src/seed.ts",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
 		"test:watch": "vitest",

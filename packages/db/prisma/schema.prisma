@@ -7,3 +7,67 @@ generator client {
 datasource db {
   provider = "sqlite"
 }
+
+enum EmployeeStatus {
+  active
+  terminated
+}
+
+enum Gender {
+  woman
+  man
+  non_binary
+  undisclosed
+}
+
+model Employee {
+  id                  String               @id @default(uuid())
+  name                String
+  countryCode         String
+  department          String
+  jobTitle            String
+  level               String
+  gender              Gender
+  hireDate            DateTime
+  status              EmployeeStatus       @default(active)
+  currencyCode        String
+  annualBaseMinor     Int
+  bonusTargetBps      Int
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  currency            FxRate               @relation(fields: [currencyCode], references: [currencyCode], onDelete: Restrict)
+  compensationChanges CompensationChange[]
+
+  @@index([status, name, id])
+  @@index([countryCode, status])
+  @@index([department, status])
+  @@index([jobTitle, status])
+  @@index([level, status])
+  @@index([currencyCode])
+}
+
+model CompensationChange {
+  id              String   @id @default(uuid())
+  employeeId      String
+  oldBaseMinor    Int?
+  newBaseMinor    Int
+  oldBonusBps     Int?
+  newBonusBps     Int
+  oldCurrencyCode String?
+  newCurrencyCode String
+  changedAt       DateTime @default(now())
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  employee        Employee @relation(fields: [employeeId], references: [id], onDelete: Restrict)
+
+  @@index([employeeId, changedAt, id])
+}
+
+model FxRate {
+  currencyCode  String     @id
+  usdRateMicros Int
+  asOfDate      DateTime
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  employees     Employee[]
+}
