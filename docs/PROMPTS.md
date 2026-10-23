@@ -161,3 +161,7 @@ All implemented features since 817d38b (Recommended)
 ## Prompt 14
 
 continue
+
+## Prompt 15
+
+if everything is completed.. then pls move forward and give me findings

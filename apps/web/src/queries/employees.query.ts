@@ -18,9 +18,12 @@ function useEmployeeMutation<Input>(
 	return useMutation({
 		mutationFn,
 		onSuccess: (employee) => {
-			cache.setQueryData(EMPLOYEE_KEYS.detail(employee.id), employee);
-			cache.invalidateQueries({ queryKey: EMPLOYEE_KEYS.lists });
-			cache.invalidateQueries({ queryKey: EMPLOYEE_KEYS.options });
+			const queryKey = EMPLOYEE_KEYS.detail(employee.id);
+			return cache.cancelQueries({ queryKey, exact: true }).then(() => {
+				cache.setQueryData(queryKey, employee);
+				cache.invalidateQueries({ queryKey: EMPLOYEE_KEYS.lists });
+				cache.invalidateQueries({ queryKey: EMPLOYEE_KEYS.options });
+			});
 		},
 	});
 }
