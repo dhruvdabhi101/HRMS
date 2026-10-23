@@ -73,7 +73,7 @@ Checks passed: 84 server tests, 15 existing frontend tests, `pnpm ready`, and pr
 - [x] Build the directory as the primary entry page, with search, filters, pagination, and links to employee details.
 - [x] Manually verify filter changes reset pagination appropriately and displayed totals match results.
 - [ ] Measure representative list requests against 10,000 seeded employees using the agreed performance definition; optimize based on evidence.
-- [ ] Deploy this first usable slice to the VPS and verify persistent database storage.
+- [x] Deploy this first usable slice to the VPS and verify persistent database storage.
 
 Verification: the directory navigates 10,000 employees correctly and meets the defined performance target.
 
@@ -90,9 +90,7 @@ Local performance check, 2026-10-23: production NestJS via `pnpm --filter server
 | IN + Engineering + L3 | 46 | 1.69 | 1.90 | 2.05 |
 | Page 100 | 9,090 | 0.48 | 0.66 | 0.71 |
 
-These are local baseline measurements, not the agreed deployed acceptance check. Caddy/HTTPS, VPS persistence, and production browser paint timings remain unverified; the two deployment/performance checklist items stay open pending the VPS SSH target and public hostname. Production startup checks also fixed the template's missing direct Express dependency and build output path so `start:prod` runs the compiled application.
-
-Deployment is deferred while the user tests locally. The intended public hostname is `incubyte-test.ruv.world`; keep it configurable through environment variables when adding Caddy deployment configuration. Application URLs are already configured in the server/web `.env` files. Preserve localhost settings for local testing; the VPS SSH target is still unspecified.
+These are local baseline measurements, not the agreed deployed acceptance check. Production UI timings and deployment status are recorded under [step 9](#9-release-and-submission). The measurement item stays open until the API boundary is measured from the VPS. Production startup checks also fixed the template's missing direct Express dependency and build output path so `start:prod` runs the compiled application.
 
 ## 5. Edit compensation and terminate employees
 
@@ -155,24 +153,44 @@ Final verification exposed intermittent HTTP 401/404 responses from local test l
 
 ## 8. Distribution and gender comparisons
 
-- [ ] Add a filterable employee pay-position box plot on each detail page, reusing distribution statistics with a highlighted salary, median, average, and explicit cohort membership.
-
-- [ ] Test distribution summaries, the agreed quartile/outlier rule, ties, empty groups, and small groups against explicit expected values.
-- [ ] Implement database-side distribution calculations and a view that makes the spread and outliers visible.
-- [ ] Test median pay by gender within level with country/department filters, group sizes, and the agreed gap/missing-data rules.
-- [ ] Implement gender comparison reporting and UI, clearly stating the comparison basis and limitations.
-- [ ] Manually verify filtering and empty states, and trace displayed values back to fixture results.
+- [x] Add an employee pay-position box plot on each detail page, reusing distribution statistics with a highlighted salary, median, average, and explicit cohort membership.
+- [x] Test distribution summaries, the agreed quartile/outlier rule, ties, empty groups, and small groups against explicit expected values.
+- [x] Implement database-side distribution calculations and a view that makes the spread and outliers visible.
+- [x] Test median pay by gender within level with country/department filters, group sizes, and the agreed gap/missing-data rules.
+- [x] Implement gender comparison reporting and UI, clearly stating the comparison basis and limitations.
+- [x] Manually verify filtering and empty states, and trace displayed values back to fixture results.
 
 Verification: the HR manager can inspect pay spread and gender differences without misleading grouping or hidden sample sizes.
 
+Tests were committed before each implementation (`cd32090`, then `066d110` for peer-comparison freshness and salary-position wording). A synthetic fixture traced displayed values to hand calculations: salaries 10–100 give Q1 20, median 30, Q3 40, upper fence 70, and one outlier at 100; four CAD 100.00 salaries convert to USD 74.00 with no spread; women `[80,000, 100,000]` versus men `[100,000, 120,000]` give an 18.18% gap. Terminated employees are excluded from cohorts but keep a labelled marker. The detail page originally rendered an empty chart because Recharts 3 dropped reference marks when the hidden Y axis had no data; it was fixed and checked in the browser. Following review, the detail page shows a compact plot in the compensation card, comparing only against the employee's own country, department, role, or level; arbitrary filters and the outlier list stay on the distribution report.
+
 ## 9. Release and submission
 
-- [ ] Run the complete server test suite, existing tests, `pnpm ready`, and production builds; resolve failures caused by the work.
-- [ ] Verify a clean checkout can install, configure, migrate, seed, test, and build using documented commands.
-- [ ] Finish VPS deployment with production processes, HTTPS, persistent SQLite storage, and a tested backup/restore procedure.
+- [x] Run the complete server test suite, existing tests, `pnpm ready`, and production builds; resolve failures caused by the work.
+- [x] Verify a clean checkout can install, configure, migrate, seed, test, and build using documented commands.
+- [x] Finish VPS deployment with production processes, HTTPS, and persistent SQLite storage. Backup/restore is not implemented and is out of scope by owner decision (2026-10-24).
 - [ ] Verify deployed employee management, salary history, filtered export, all insights, and 10,000-row performance.
 - [ ] Record a concise demo: find an employee, update compensation, inspect history, compare pay groups, and export data.
 - [ ] Update setup/deployment instructions and concise decision/AI-use notes with what was actually implemented and verified. Link the deployed app and demo.
-- [ ] Review incremental commit history and confirm the repository contains no real employee data, secrets, or database files.
+- [x] Review incremental commit history and confirm the repository contains no real employee data, secrets, or database files.
 
 Verification: another person can reproduce the setup and use the deployed application and demo to evaluate every scoped requirement.
+
+Release checks, 2026-10-24:
+
+- **Suites:** 350 server and 47 frontend tests, `pnpm ready`, and both production builds passed.
+- **Clean checkout:** a fresh clone following the README failed at `pnpm db:seed` and in 11 server test files, because `@repo/shared` resolves to a gitignored `dist/` that only `pnpm package` or `pnpm build` creates. The README now runs `pnpm package` after `pnpm db:generate`. With that step, the clone seeded 10,000 employees, 10,000 history rows, and 5 FX rates, and all 350 server tests passed.
+- **Deployment:** Caddy serves both hostnames over HTTPS (HTTP/2); PM2 runs `hrms-server` and `hrms-web`. The owner confirmed persistence: redeploys run `db:deploy` but never seed, and the gitignored SQLite file is untouched by `git pull` (procedure in the README). Production holds 10,001 employees: the 10,000-row seed plus one created after it. Automatic restart after a VPS reboot (`pm2 startup`/`pm2 save`) is not set up; after a reboot the apps must be started manually.
+- **Deployed smoke check (read-only):** directory, detail with history and peer box plot, filtered CSV export (46 rows for IN + Engineering + L3, matching the directory), group explorer, distribution, and gender comparison all worked. The US median was USD 118,099.20 in both the group explorer and distribution reports. Create, edit, and terminate were not exercised against production data.
+- **Repository:** gitleaks found no leaks in 49 commits; no database, env, or data-export files are tracked.
+
+UI list performance, 2026-10-24, against production (10,001 employees, page size 25). Chrome 155 (headless, driven by Playwright) on macOS / Apple M5, about 15 ms TCP connect to the VPS. Each sample is a full reload with a warm HTTP cache and the production rate limit unchanged; 5 warmups then 20 samples per case, no errors. Measured from the browser starting the `/api/employees` request until the frame after the expected rows and count line committed. Nearest-rank percentiles:
+
+| Case | p50 ms | p95 ms | Max ms |
+|---|---:|---:|---:|
+| Default first page | 38.8 | 46.2 | 46.6 |
+| Literal search `Aadi` | 43.1 | 58.7 | 64.1 |
+| IN + Engineering + L3 | 52.2 | 66.3 | 71.7 |
+| Page 100 | 37.0 | 49.6 | 69.0 |
+
+Every case meets the 300 ms UI target. Request-to-response alone was p95 32.5–57.6 ms from this machine. Initial page load (navigation start to rows painted) was p95 104–313 ms; it is reported separately and is not part of the target. The API boundary (an HTTP client on the VPS through Caddy, p95 below 200 ms) has not been measured because it needs VPS access.

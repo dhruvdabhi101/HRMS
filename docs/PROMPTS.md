@@ -203,26 +203,60 @@ let's fix this.
 
 ## Prompt 21
 
-we need to implement persistent queries on page refreshes.. 
+we need to implement persistent queries on page refreshes..
 https://nuqs.dev/docs/installation.md
-check this and lets implement for our employee data table.. 
+check this and lets implement for our employee data table..
 
 Also lets increase the width of the table..
 
 ## Prompt 22
 
-can we also add this in plan or requiredment file that we are deliberatly leaving out option for rehire 
-and option for future hire or future joining date. 
+can we also add this in plan or requiredment file that we are deliberatly leaving out option for rehire
+and option for future hire or future joining date.
 
 - remove add another eomployee button from employee specific page
 
-and render mermaid diagrams and put them in md files so we can read from documentation pages accordingly 
+and render mermaid diagrams and put them in md files so we can read from documentation pages accordingly
 
-Also in documentation pages, we have large titles.. so its looking bad in sidebar.. so please improve UI on that front.. 
+Also in documentation pages, we have large titles.. so its looking bad in sidebar.. so please improve UI on that front..
 
-Use $apple-design  for better ui experience 
+Use $apple-design  for better ui experience
 $frontend  use this skill if needed as well
 
 ## Prompt 23
 
 lets finish step 8 and then 9. I guess 9th is already done since it is already deployed.. after 8th changes we'll be deploying that as wel.
+
+## Prompt 24
+
+current deployed url is incubyte.ruv.world, and its on caddy on the vps with pm2
+
+We don't have backup/restore instructions or setup.. we'll remove those from the diagrams and our architecture diagrams.. we'll keep only things which are there in current setup.. ask if we have anything that we have written and not done.
+List them out. most probably everything else is done and we are hardly missing anything out apart from restoration and backup.
+
+## Prompt 25
+
+1. Demo recording is missing.. but i'll do it.. so keep it marked
+2. I want you to do the browser performance meansurements
+3. we are perisisting the sqlite db, and we don't run seed script on every redeploy
+
+cd /var/www/hrms
+git pull
+pnpm install --frozen-lockfile
+pnpm db:generate
+pnpm db:deploy
+pnpm build
+cp -r apps/web/public apps/web/.next/standalone/apps/web/
+cp -r apps/web/.next/static apps/web/.next/standalone/apps/web/.next/
+pm2 restart hrms-server hrms-web
+
+this is the script that i run to redeploy without losing sqlite data..
+
+## Prompt 26
+
+continue
+
+## Prompt 27
+
+1. no we haven't done setup of pm2 on vps reboot as of now
+2. yes.. pls commit. i guess we are done overall

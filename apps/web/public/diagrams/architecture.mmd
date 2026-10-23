@@ -7,8 +7,9 @@ flowchart TB
         UI --> Query --> Service --> Client
     end
 
-    subgraph VPS["Hostinger VPS"]
+    subgraph VPS["VPS"]
         Caddy["Caddy<br/>HTTPS termination and reverse proxy"]
+        PM2["PM2 process manager"]
         Next["Next.js process<br/>App Router and UI delivery"]
 
         subgraph Server["NestJS process · /api prefix"]
@@ -25,20 +26,20 @@ flowchart TB
             Insights --> Prisma
         end
 
-        subgraph Disk["Persistent disk"]
+        subgraph Disk["VPS filesystem"]
             DB[("SQLite database<br/>Employee · CompensationChange · FxRate")]
         end
 
         Setup["Migration and seed commands"]
-        Backup["Backup procedure<br/>Consistent SQLite snapshot"]
 
-        Caddy -->|"Page requests"| Next
-        Caddy -->|"/api/* · preserve prefix"| Controllers
+        PM2 -.->|"Manages"| Next
+        PM2 -.->|"Manages"| Controllers
+        Caddy -->|"incubyte.ruv.world"| Next
+        Caddy -->|"api.incubyte.ruv.world · /api/*"| Controllers
         Prisma <-->|"Reads, writes, transactions, SQL aggregates"| DB
         Setup --> DB
-        DB -.-> Backup
     end
 
     UI -->|"HTTPS page requests"| Caddy
-    Client <-->|"HTTPS · JSON and CSV · same origin"| Caddy
+    Client <-->|"HTTPS · JSON and CSV · API subdomain"| Caddy
     Next -->|"Pages and UI assets via Caddy"| UI

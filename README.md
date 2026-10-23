@@ -62,7 +62,7 @@ The CLI needs Chrome/Chromium. Set `PUPPETEER_EXECUTABLE_PATH` to an installed b
 
 ### Prerequisites
 
-- Node.js ≥ 20, pnpm ≥ 11.5
+- Node.js ≥ 22, pnpm 11.5 (the repository pins pnpm 11.5.0)
 
 ### 1. Install dependencies
 
@@ -84,6 +84,7 @@ The defaults work for local development. `DATABASE_URL` points to the SQLite fil
 ```bash
 pnpm db:migrate
 pnpm db:generate
+pnpm package   # builds @repo/shared, which the seed, server, and tests import
 pnpm db:seed
 pnpm dev
 ```
@@ -102,6 +103,28 @@ pnpm ready                # generation, lint, and typecheck; does not run tests
 ```
 
 Integration tests apply the checked-in migration SQL to temporary SQLite files and remove them afterward. They do not use the development database. Routine tests use small fixtures; the full 10,000-row seed is verified separately. Calculation and input decisions are in [docs/PRODUCT_RULES.md](docs/PRODUCT_RULES.md).
+
+---
+
+## Deployment
+
+Live: [incubyte.ruv.world](https://incubyte.ruv.world) (Next.js) and [api.incubyte.ruv.world](https://api.incubyte.ruv.world/api/health) (NestJS), on one VPS. Caddy terminates HTTPS and proxies each hostname to its app; PM2 runs the two processes as `hrms-server` (`node dist/main`) and `hrms-web` (the Next.js standalone server). Production `.env` files set `NODE_ENV=production`, the public URLs, `CORS_URLS` to the frontend origin, and `NEXT_PUBLIC_API_URL` to the API hostname.
+
+The database was seeded once. Redeploys apply migrations but never seed, and the SQLite file is gitignored, so `git pull` does not touch it:
+
+```bash
+cd /var/www/hrms
+git pull
+pnpm install --frozen-lockfile
+pnpm db:generate
+pnpm db:deploy
+pnpm build
+cp -r apps/web/public apps/web/.next/standalone/apps/web/
+cp -r apps/web/.next/static apps/web/.next/standalone/apps/web/.next/
+pm2 restart hrms-server hrms-web
+```
+
+The two `cp` commands are needed because Next.js standalone output excludes `public/` and `.next/static/`. Backup/restore and automatic PM2 restart after a VPS reboot are not set up.
 
 ---
 

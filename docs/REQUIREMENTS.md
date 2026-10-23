@@ -32,7 +32,7 @@ A single HR manager. No other roles.
 4. **Export:** download the current filtered view as CSV.
 5. **Pay insights** (active employees only; terminated employees are excluded):
    - **Group-by explorer:** pick 1–2 dimensions (country, department, level, title) and a metric (headcount, min, median, avg, max, total cost) and see the result as a table and a chart, in USD.
-   - **Pay distribution:** spread of salaries within a chosen group, with outliers visible. Employee detail pages show a filterable box-and-whisker comparison highlighting their salary, median, average, and full range.
+   - **Pay distribution:** spread of salaries within a chosen group, with outliers visible. Employee detail pages show a compact box-and-whisker comparison inside the compensation card, highlighting their salary, median, average, and full range. Peer choices use that employee's own country, department, role, or level; arbitrary filters and the outlier list belong on the distribution report.
    - **Gender pay gap:** median pay by gender within the same level, so the comparison is like-for-like.
 6. **Seed data:** a script that generates ~10k realistic employees across several countries, so the app can be demoed.
 

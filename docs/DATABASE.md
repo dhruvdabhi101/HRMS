@@ -4,7 +4,7 @@ navTitle: Database model
 
 # Database diagram
 
-SQLite model for [the requirements](REQUIREMENTS.md). V1 field semantics and calculation rules are defined in [PRODUCT_RULES.md](PRODUCT_RULES.md). The tables and indexes are implemented in [schema.prisma](../packages/db/prisma/schema.prisma); API workflows are planned in later steps.
+SQLite model for [the requirements](REQUIREMENTS.md). V1 field semantics and calculation rules are defined in [PRODUCT_RULES.md](PRODUCT_RULES.md). The tables and indexes are implemented in [schema.prisma](../packages/db/prisma/schema.prisma); create, edit, termination, history, export, and insights workflows use this model.
 
 ![Database relationships and fields for employees, compensation history, and fixed FX rates](../apps/web/public/diagrams/database.svg)
 
