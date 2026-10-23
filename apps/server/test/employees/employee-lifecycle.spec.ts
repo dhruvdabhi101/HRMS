@@ -35,7 +35,7 @@ describe("employee edits and termination", () => {
 		app.setGlobalPrefix("api");
 		app.useGlobalPipes(createValidationPipe());
 		app.useGlobalFilters(new GlobalExceptionFilter());
-		await app.init();
+		await app.listen(0);
 		employee = (await request(app.getHttpServer()).post("/api/employees").send(input).expect(201)).body;
 	});
 
@@ -102,7 +102,9 @@ describe("employee edits and termination", () => {
 		["bonusTargetBps", -1], ["bonusTargetBps", 10_001], ["bonusTargetBps", 0.5], ["bonusTargetBps", "1000"],
 		["currencyCode", "USD"], ["status", "terminated"], ["id", unknownId], ["compensationChanges", []],
 	])("rejects invalid or protected %s=%j atomically", async (field, value) => {
-		const { body } = await update({ name: "Changed", [field]: value }).expect(400);
+		const response = await update({ name: "Changed", [field]: value });
+		expect(response.status, response.text).toBe(400);
+		const { body } = response;
 		expect(body.fieldErrors[field]).toEqual(expect.any(String));
 		expect((await detail()).body).toEqual(employee);
 	});

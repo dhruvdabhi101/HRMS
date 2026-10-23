@@ -48,6 +48,17 @@ export function CompensationHistoryView({
 									</time>{" "}
 									· Recorded in UTC
 								</p>
+								{change.oldBaseMinor !== null &&
+									change.oldCurrencyCode !== null && (
+										<p className="mt-1 break-words text-muted-foreground">
+											Previous:{" "}
+											{formatEmployeeMoney(
+												change.oldBaseMinor,
+												change.oldCurrencyCode,
+											)}{" "}
+											base · {(change.oldBonusBps ?? 0) / 100}% bonus target
+										</p>
+									)}
 								<p className="mt-1 break-words">
 									{formatEmployeeMoney(
 										change.newBaseMinor,

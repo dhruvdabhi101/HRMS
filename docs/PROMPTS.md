@@ -127,3 +127,19 @@ lets give me a comparison table for each 3 and i'll make decision based on these
 ## Prompt 9
 
 yes go with shadcn + TanStack through our existing [CustomTable.tsx](packages/ui/src/general/CustomTable.tsx)
+
+## Prompt 10
+
+Step 4 also includes VPS deployment through Caddy. Which SSH host/user and public hostname should I use? Please don’t paste passwords or private keys.
+incubyte-test.ruv.world would be our hostname.. but i think we should keep them in proper .env so it can be customisable accordingly.
+but no need to move to step 4. i'll be testing this locally first
+
+## Prompt 11
+
+Let's move to next task and implement it..
+before implementing write test cases including edge cases like this
+: terminate already terminated employee
+: update the employee with existing data like if employee's salary is lets say 1K and while updating i just do 1k only. then it shouldn't be allowed
+: we can't update salary or bonus of terminated employee and similar edge cases.. also if similar cases are not done for the previous implemented feature.e then do so as well
+
+first implement tests.. commit those tests.. and then implement feature around it.

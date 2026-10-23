@@ -9,9 +9,17 @@ import { useBreadcrumbLabel } from "@/hooks/use-breadcrumb-label";
 import { ApiError } from "@/lib/api-error";
 import { useEmployee } from "@/queries";
 import { CompensationHistoryView } from "./CompensationHistory.view";
+import { EmployeeForm } from "./EmployeeForm";
 import { EmployeeSummaryView } from "./EmployeeSummary.view";
+import { TerminateEmployee } from "./TerminateEmployee";
 
-export function EmployeeDetail({ employeeId }: { employeeId: string }) {
+export function EmployeeDetail({
+	employeeId,
+	edit = false,
+}: {
+	employeeId: string;
+	edit?: boolean;
+}) {
 	const { data, isPending, isError, error, refetch } = useEmployee(employeeId);
 	useBreadcrumbLabel(
 		employeeId,
@@ -57,9 +65,30 @@ export function EmployeeDetail({ employeeId }: { employeeId: string }) {
 				</EmptyHeader>
 			</Empty>
 		);
+	if (edit && data.status === "active")
+		return (
+			<div className="space-y-6">
+				<h1 className="text-2xl font-semibold">Edit employee</h1>
+				<EmployeeForm key={data.id} employee={data} />
+			</div>
+		);
+
 	return (
 		<div className="space-y-6">
 			<EmployeeSummaryView employee={data} />
+			{data.status === "active" ? (
+				<div className="flex flex-wrap gap-3">
+					<Link
+						href={`/employees/${data.id}/edit`}
+						className={buttonVariants({ variant: "outline" })}
+					>
+						Edit employee
+					</Link>
+					<TerminateEmployee employee={data} />
+				</div>
+			) : (
+				<AlertMessage message="This employee is terminated. Their record and compensation history are read-only." />
+			)}
 			<CompensationHistoryView changes={data.compensationChanges} />
 			<Link
 				href="/employees/new"

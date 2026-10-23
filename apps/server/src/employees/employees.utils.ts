@@ -1,4 +1,5 @@
-import { CompensationChange, Employee } from "@repo/db";
+import { NotFoundException } from "@nestjs/common";
+import { CompensationChange, Employee, Prisma } from "@repo/db";
 import { EmployeeDetail } from "@repo/shared";
 import { calculateCompensation } from "../compensation/compensation.utils";
 
@@ -44,3 +45,21 @@ export function toEmployeeDetail(
 		),
 	};
 }
+
+export async function findEmployee(
+	prisma: Prisma.TransactionClient,
+	id: string,
+) {
+	const employee = await prisma.employee.findUnique({
+		where: { id },
+		include: employeeDetailInclude,
+	});
+	if (!employee) throw new NotFoundException("Employee not found");
+	return employee;
+}
+
+export const employeeDetailInclude = {
+	compensationChanges: {
+		orderBy: [{ changedAt: "desc" }, { id: "desc" }],
+	},
+} satisfies Prisma.EmployeeInclude;

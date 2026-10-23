@@ -22,6 +22,7 @@ interface EmployeeFormFieldProps {
 	inputMode?: "decimal";
 	description?: string;
 	suggestions?: string[];
+	onValueChange?: () => void;
 }
 
 export function EmployeeFormField({
@@ -33,6 +34,7 @@ export function EmployeeFormField({
 	inputMode,
 	description,
 	suggestions,
+	onValueChange,
 }: EmployeeFormFieldProps) {
 	return (
 		<Controller
@@ -46,6 +48,10 @@ export function EmployeeFormField({
 					{options ? (
 						<NativeSelect
 							{...field}
+							onChange={(event) => {
+								field.onChange(event);
+								onValueChange?.();
+							}}
 							value={field.value ?? ""}
 							id={name}
 							aria-invalid={fieldState.invalid}

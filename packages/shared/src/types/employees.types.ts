@@ -18,6 +18,8 @@ export interface CreateEmployeeInput {
 	currencyCode?: string;
 }
 
+export type UpdateEmployeeInput = Partial<CreateEmployeeInput>;
+
 export interface EmployeeDirectoryQuery {
 	page?: number;
 	pageSize?: number;

@@ -1,22 +1,19 @@
 "use client";
 
-import {
-	EMPLOYEE_COUNTRIES,
-	EMPLOYEE_GENDERS,
-	EMPLOYEE_LEVELS,
-	enumToTitleText,
-} from "@repo/shared";
+import { EMPLOYEE_COUNTRIES, type EmployeeDetail } from "@repo/shared";
 import { Button } from "@repo/ui/components/button";
 import { FieldLegend, FieldSet } from "@repo/ui/components/field";
 import AlertMessage from "@repo/ui/general/AlertMessage";
 import LoadingButton from "@repo/ui/general/LoadingButton";
+import Link from "next/link";
 import { useWatch } from "react-hook-form";
 import { useEmployeeForm } from "@/hooks/use-employee-form";
 import { useEmployeeFilterOptions } from "@/queries";
-import { EmployeeFormField } from "./EmployeeFormField";
+import { EmployeeCompensationFields } from "./EmployeeCompensationFields";
+import { EmployeeProfileFields } from "./EmployeeProfileFields";
 
-export function EmployeeForm() {
-	const { form, submit, isPending } = useEmployeeForm();
+export function EmployeeForm({ employee }: { employee?: EmployeeDetail }) {
+	const { form, submit, isPending } = useEmployeeForm(employee);
 	const options = useEmployeeFilterOptions();
 	const countryCode = useWatch({ control: form.control, name: "countryCode" });
 	const currency = EMPLOYEE_COUNTRIES.find(
@@ -46,78 +43,22 @@ export function EmployeeForm() {
 						</Button>
 					</div>
 				)}
-				<div className="grid gap-5 sm:grid-cols-2">
-					<EmployeeFormField
-						control={form.control}
-						name="name"
-						label="Full name"
-					/>
-					<EmployeeFormField
-						control={form.control}
-						name="hireDate"
-						label="Hire date"
-						type="date"
-					/>
-					<EmployeeFormField
-						control={form.control}
-						name="department"
-						label="Department"
-						suggestions={options.data?.departments}
-					/>
-					<EmployeeFormField
-						control={form.control}
-						name="jobTitle"
-						label="Job title"
-						suggestions={options.data?.jobTitles}
-					/>
-					<EmployeeFormField
-						control={form.control}
-						name="countryCode"
-						label="Country"
-						options={EMPLOYEE_COUNTRIES.map((country) => ({
-							value: country.code,
-							label: country.name,
-						}))}
-					/>
-					<EmployeeFormField
-						control={form.control}
-						name="level"
-						label="Level"
-						options={EMPLOYEE_LEVELS.map((level) => ({
-							value: level,
-							label: level,
-						}))}
-					/>
-					<EmployeeFormField
-						control={form.control}
-						name="gender"
-						label="Gender"
-						options={EMPLOYEE_GENDERS.map((gender) => ({
-							value: gender,
-							label: enumToTitleText(gender),
-						}))}
-					/>
-				</div>
+				<EmployeeProfileFields
+					control={form.control}
+					suggestions={options.data}
+					onCountryChange={() => {
+						if (!employee) return;
+						form.setValue("annualBase", "", { shouldDirty: true });
+						form.setValue("bonusTarget", "", { shouldDirty: true });
+					}}
+				/>
 			</FieldSet>
-			<FieldSet disabled={isPending}>
-				<FieldLegend>Annual compensation</FieldLegend>
-				<div className="grid gap-5 sm:grid-cols-2">
-					<EmployeeFormField
-						control={form.control}
-						name="annualBase"
-						label={`Annual base salary (${currency})`}
-						inputMode="decimal"
-						description="Annual amount in local currency. Up to two decimal places."
-					/>
-					<EmployeeFormField
-						control={form.control}
-						name="bonusTarget"
-						label="Bonus target (%)"
-						inputMode="decimal"
-						description="0–100% of annual base salary."
-					/>
-				</div>
-			</FieldSet>
+			<EmployeeCompensationFields
+				control={form.control}
+				currency={currency}
+				currencyChanged={!!employee && countryCode !== employee.countryCode}
+				isPending={isPending}
+			/>
 			{form.formState.errors.root?.server?.message && (
 				<div role="alert">
 					<AlertMessage
@@ -127,8 +68,16 @@ export function EmployeeForm() {
 				</div>
 			)}
 			<LoadingButton type="submit" isLoading={isPending}>
-				Create employee
+				{employee ? "Save changes" : "Create employee"}
 			</LoadingButton>
+			{employee && (
+				<Link
+					href={`/employees/${employee.id}`}
+					className="ml-4 text-sm underline"
+				>
+					Cancel
+				</Link>
+			)}
 		</form>
 	);
 }

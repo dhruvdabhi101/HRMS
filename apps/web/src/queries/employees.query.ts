@@ -34,3 +34,11 @@ export function useEmployee(id: string) {
 		queryFn: () => EmployeesService.get(id),
 	});
 }
+
+export function useUpdateEmployee() {
+	return useMutation({ mutationFn: EmployeesService.update });
+}
+
+export function useTerminateEmployee() {
+	return useMutation({ mutationFn: EmployeesService.terminate });
+}

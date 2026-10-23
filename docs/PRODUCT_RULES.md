@@ -51,7 +51,7 @@ Acceptance examples: trimmed name `  Asha Rao  ` becomes `Asha Rao`; 0 base, 100
 
 ## 4. Compensation history and changes
 
-Create an initial history entry with null previous base/bonus/currency and the employee's starting values. Any change to base, bonus, or currency appends one entry containing the complete previous/new compensation snapshot and a server-generated UTC timestamp. Profile-only edits and unchanged saves add no compensation history entry.
+Create an initial history entry with null previous base/bonus/currency and the employee's starting values. Any change to base, bonus, or currency appends one entry containing the complete previous/new compensation snapshot and a server-generated UTC timestamp. Profile-only edits add no compensation history entry. Reject a save that changes no employee values with 400 and “No changes to save”; compare normalized text and integer compensation, so equivalent numeric formatting does not create an update or alter timestamps. A profile edit may include unchanged compensation.
 
 Persist the employee update and history insert in one transaction. Snapshot currencies on history entries, and show original local amounts; never reinterpret them using the employee's current currency. Order history newest first with a stable ID tie-breaker when timestamps match. History has no edit/delete API.
 
@@ -60,7 +60,7 @@ When a country change changes currency, require explicit new base and bonus inpu
 Acceptance examples:
 
 - Creation at INR 1,000,000 with 10% bonus creates exactly one initial entry.
-- Changing bonus to 12% creates one entry with unchanged base, old bonus 10%, and new bonus 12%. Saving again adds none.
+- Changing bonus to 12% creates one entry with unchanged base, old bonus 10%, and new bonus 12%. Saving the same values again is rejected and adds no history.
 - Renaming the employee creates no compensation entry. A failed history insert rolls back the associated pay change.
 - Moving IN → US without explicit new compensation is rejected. Moving with USD 120,000 and 10% records both INR and USD snapshots; the old entry still displays INR.
 

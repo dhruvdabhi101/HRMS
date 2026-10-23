@@ -12,7 +12,7 @@ Design references: [database diagram](DATABASE.md) and [application architecture
 - [ ] Refactor with tests green; repeat for the next behavior.
 - [ ] Connect the UI and manually verify the affected workflow and applicable loading, empty, error, and validation states. No new automated UI tests for now.
 - [ ] Run relevant tests and `pnpm ready`; inspect the diff for unrelated changes.
-- [ ] Commit the completed behavior with a descriptive message. Keep tests and implementation together in a passing commit.
+- [ ] Commit the completed behavior with a descriptive message. For step 5, the user requested a separate failing test commit before implementation; keep later implementation commits passing.
 
 Use unit tests for isolated business calculations and integration tests with isolated SQLite databases for persistence, queries, and transactions. Prefer small fixtures with hand-calculated answers over the 10,000-row demo dataset. Avoid tests of framework wiring, trivial delegation, private implementation details, or coverage metrics alone.
 
@@ -86,17 +86,25 @@ Local performance check, 2026-10-23: production NestJS via `pnpm --filter server
 
 These are local baseline measurements, not the agreed deployed acceptance check. Caddy/HTTPS, VPS persistence, and production browser paint timings remain unverified; the two deployment/performance checklist items stay open pending the VPS SSH target and public hostname. Production startup checks also fixed the template's missing direct Express dependency and build output path so `start:prod` runs the compiled application.
 
+Deployment is deferred while the user tests locally. The intended public hostname is `incubyte-test.ruv.world`; keep it configurable through environment variables when adding Caddy deployment configuration. Application URLs are already configured in the server/web `.env` files. Preserve localhost settings for local testing; the VPS SSH target is still unspecified.
+
 ## 5. Edit compensation and terminate employees
 
-- [ ] Test employee profile edits and valid compensation updates.
-- [ ] Test that base or bonus changes record correct previous/new values, while unchanged compensation adds no history entry.
-- [ ] Prove compensation and history are atomic using a SQLite integration test that forces a history write failure and verifies rollback.
-- [ ] Test termination preserves employee/history data and follows the agreed repeated-termination behavior.
-- [ ] Implement update and termination endpoints and reuse create/edit form fields where practical.
-- [ ] Add the salary history timeline and termination confirmation explaining that records remain available.
-- [ ] Manually verify edit, history, termination, and access to terminated records.
+- [x] Test employee profile edits and valid compensation updates.
+- [x] Test that base or bonus changes record correct previous/new values, while unchanged compensation adds no history entry and a wholly unchanged save is rejected.
+- [x] Prove compensation and history are atomic using a SQLite integration test that forces a history write failure and verifies rollback.
+- [x] Test termination preserves employee/history data and follows the agreed repeated-termination behavior.
+- [x] Implement update and termination endpoints and reuse create/edit form fields where practical.
+- [x] Add the salary history timeline and termination confirmation explaining that records remain available.
+- [x] Manually verify edit, history, termination, and access to terminated records.
 
 Verification: edits preserve a trustworthy history, failed writes leave data unchanged, and termination never removes history.
+
+Verified locally with 61 new SQLite HTTP lifecycle cases and 11 additional create/detail edge cases (199 server tests total). Tests were committed first as `1dc8a78`, with all 61 lifecycle cases failing on the missing endpoints and the other 138 server tests passing. Updates reject empty/normalized unchanged saves, protected fields, nulls, invalid compensation, and edits to terminated employees. Profile-only edits preserve history; base/bonus/currency changes append complete snapshots. A forced SQLite history failure proves profile/pay/history rollback. Repeated termination is a successful no-op, including unchanged timestamps; records and history remain readable.
+
+The create/edit UI shares profile and compensation fields. Country changes clear both pay inputs and require explicit amounts in the destination currency. Manual checks against a temporary SQLite database covered numeric-equivalent unchanged saves, precision errors, valid salary and currency edits, previous/new local history, preserved inputs and retry after network failure, termination confirmation/cancel, termination failure/retry, terminated detail and direct edit URLs, missing records, loading skeletons, active/terminated directory views, and a 390px layout. Existing frontend tests remain; no new automated UI tests were added.
+
+Verification also exposed intermittent HTTP connection failures in the new test fixture when Supertest opened and closed a temporary listener for every request. Keeping the fixture server listening until test teardown removed the observed failure in repeated full-suite runs. Tests retain all business assertions. `pnpm ready`, the complete server/frontend suites, and both production builds passed. Deployment remains deferred.
 
 ## 6. Filtered CSV export
 
