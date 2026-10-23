@@ -2,6 +2,8 @@
 
 Scope and exclusions are defined in [REQUIREMENTS.md](REQUIREMENTS.md). Build in small, demonstrable slices, using TDD primarily on the server. Check items only after verification; this plan does not mark implementation as complete.
 
+Design references: [database diagram](DATABASE.md) and [application architecture](ARCHITECTURE.md). Deployment uses Caddy as the reverse proxy.
+
 ## Working loop for every slice
 
 - [ ] Define one observable behavior and its expected result.
