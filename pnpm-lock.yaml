@@ -49,6 +49,9 @@ importers:
 
   apps/server:
     dependencies:
+      '@faker-js/faker':
+        specifier: 10.6.0
+        version: 10.6.0
       '@nestjs/common':
         specifier: ^11.2.6
         version: 11.2.6(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)
@@ -100,7 +103,7 @@ importers:
     devDependencies:
       '@nestjs/cli':
         specifier: ^11.0.23
-        version: 11.0.24(@swc/core@1.16.12)(@types/node@24.19.0)
+        version: 11.0.24(@swc/core@1.16.12(@swc/helpers@0.5.23))(@types/node@24.19.0)
       '@nestjs/schematics':
         specifier: ^11.0.0
         version: 11.1.0(chokidar@4.0.3)(typescript@5.9.3)
@@ -133,10 +136,10 @@ importers:
         version: 7.3.0
       ts-loader:
         specifier: ^9.6.2
-        version: 9.6.2(typescript@5.9.3)(webpack@5.106.2(@swc/core@1.16.12))
+        version: 9.6.2(typescript@5.9.3)(webpack@5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23)))
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@swc/core@1.16.12)(@types/node@24.19.0)(typescript@5.9.3)
+        version: 10.9.2(@swc/core@1.16.12(@swc/helpers@0.5.23))(@types/node@24.19.0)(typescript@5.9.3)
       tsconfig-paths:
         specifier: ^4.2.0
         version: 4.2.0
@@ -145,10 +148,10 @@ importers:
         version: 5.9.3
       unplugin-swc:
         specifier: ^1.5.9
-        version: 1.6.0(@swc/core@1.16.12)(rolldown@1.2.11)(vite@8.3.1(@types/node@24.19.0)(terser@5.51.2))(webpack@5.106.2(@swc/core@1.16.12))
+        version: 1.6.0(@swc/core@1.16.12(@swc/helpers@0.5.23))(rolldown@1.2.11)(vite@8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))(webpack@5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23)))
       vitest:
         specifier: ^4.1.10
-        version: 4.1.11(@types/node@24.19.0)(@vitest/coverage-v8@4.1.11)(vite@8.3.1(@types/node@24.19.0)(terser@5.51.2))
+        version: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.19.0)(@vitest/coverage-v8@4.1.11)(jsdom@30.1.1(@noble/hashes@1.8.0))(vite@8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))
 
   apps/web:
     dependencies:
@@ -775,6 +778,10 @@ packages:
     peerDependenciesMeta:
       '@noble/hashes':
         optional: true
+
+  '@faker-js/faker@10.6.0':
+    resolution: {integrity: sha512-3RQHgEtvL1Frl/d1cSreo7qhJ3Gk1OdNUai/CtZ8G+wYeRQnJih3s9xJ9/kgYekPQRdwgh0HXRPqMlzWGwivIQ==}
+    engines: {node: ^20.19.0 || ^22.13.0 || ^23.5.0 || >=24.0.0, npm: '>=10'}
 
   '@floating-ui/core@1.8.0':
     resolution: {integrity: sha512-0CIZ5itps/8x7BG8dEIhs53BvCUH2PCoogtakwRTut+Arm58sJooJ0AuZhLw2HJYIR5cMLNPBSS728sPho2khQ==}
@@ -6676,6 +6683,8 @@ snapshots:
     optionalDependencies:
       '@noble/hashes': 1.8.0
 
+  '@faker-js/faker@10.6.0': {}
+
   '@floating-ui/core@1.8.0':
     dependencies:
       '@floating-ui/utils': 0.2.12
@@ -7046,7 +7055,7 @@ snapshots:
       '@tybys/wasm-util': 0.10.4
     optional: true
 
-  '@nestjs/cli@11.0.24(@swc/core@1.16.12)(@types/node@24.19.0)':
+  '@nestjs/cli@11.0.24(@swc/core@1.16.12(@swc/helpers@0.5.23))(@types/node@24.19.0)':
     dependencies:
       '@angular-devkit/core': 19.2.27(chokidar@4.0.3)
       '@angular-devkit/schematics': 19.2.27(chokidar@4.0.3)
@@ -7057,17 +7066,17 @@ snapshots:
       chokidar: 4.0.3
       cli-table3: 0.6.5
       commander: 4.1.1
-      fork-ts-checker-webpack-plugin: 9.1.0(typescript@5.9.3)(webpack@5.106.2(@swc/core@1.16.12))
+      fork-ts-checker-webpack-plugin: 9.1.0(typescript@5.9.3)(webpack@5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23)))
       glob: 13.0.6
       node-emoji: 1.11.0
       ora: 5.4.1
       tsconfig-paths: 4.2.0
       tsconfig-paths-webpack-plugin: 4.2.0
       typescript: 5.9.3
-      webpack: 5.106.2(@swc/core@1.16.12)
+      webpack: 5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23))
       webpack-node-externals: 3.0.0
     optionalDependencies:
-      '@swc/core': 1.16.12
+      '@swc/core': 1.16.12(@swc/helpers@0.5.23)
     transitivePeerDependencies:
       - '@minify-html/node'
       - '@swc/css'
@@ -7902,24 +7911,6 @@ snapshots:
   '@swc/core-win32-x64-msvc@1.16.12':
     optional: true
 
-  '@swc/core@1.16.12':
-    dependencies:
-      '@swc/counter': 0.1.3
-      '@swc/types': 0.1.28
-    optionalDependencies:
-      '@swc/core-darwin-arm64': 1.16.12
-      '@swc/core-darwin-x64': 1.16.12
-      '@swc/core-linux-arm-gnueabihf': 1.16.12
-      '@swc/core-linux-arm64-gnu': 1.16.12
-      '@swc/core-linux-arm64-musl': 1.16.12
-      '@swc/core-linux-ppc64-gnu': 1.16.12
-      '@swc/core-linux-s390x-gnu': 1.16.12
-      '@swc/core-linux-x64-gnu': 1.16.12
-      '@swc/core-linux-x64-musl': 1.16.12
-      '@swc/core-win32-arm64-msvc': 1.16.12
-      '@swc/core-win32-ia32-msvc': 1.16.12
-      '@swc/core-win32-x64-msvc': 1.16.12
-
   '@swc/core@1.16.12(@swc/helpers@0.5.23)':
     dependencies:
       '@swc/counter': 0.1.3
@@ -7938,7 +7929,6 @@ snapshots:
       '@swc/core-win32-ia32-msvc': 1.16.12
       '@swc/core-win32-x64-msvc': 1.16.12
       '@swc/helpers': 0.5.23
-    optional: true
 
   '@swc/counter@0.1.3': {}
 
@@ -8370,7 +8360,7 @@ snapshots:
       obug: 2.2.1
       std-env: 4.3.0
       tinyrainbow: 3.1.1
-      vitest: 4.1.11(@types/node@24.19.0)(@vitest/coverage-v8@4.1.11)(vite@8.3.1(@types/node@24.19.0)(terser@5.51.2))
+      vitest: 4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.19.0)(@vitest/coverage-v8@4.1.11)(jsdom@30.1.1(@noble/hashes@1.8.0))(vite@8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))
 
   '@vitest/expect@4.1.11':
     dependencies:
@@ -8389,13 +8379,13 @@ snapshots:
     optionalDependencies:
       vite: 8.3.1(@types/node@20.19.43)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1)
 
-  '@vitest/mocker@4.1.11(vite@8.3.1(@types/node@24.19.0)(terser@5.51.2))':
+  '@vitest/mocker@4.1.11(vite@8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))':
     dependencies:
       '@vitest/spy': 4.1.11
       estree-walker: 3.0.3
       magic-string: 0.30.21
     optionalDependencies:
-      vite: 8.3.1(@types/node@24.19.0)(terser@5.51.2)
+      vite: 8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1)
 
   '@vitest/pretty-format@4.1.11':
     dependencies:
@@ -9484,7 +9474,7 @@ snapshots:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
-  fork-ts-checker-webpack-plugin@9.1.0(typescript@5.9.3)(webpack@5.106.2(@swc/core@1.16.12)):
+  fork-ts-checker-webpack-plugin@9.1.0(typescript@5.9.3)(webpack@5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23))):
     dependencies:
       '@babel/code-frame': 7.29.7
       chalk: 4.1.2
@@ -9499,7 +9489,7 @@ snapshots:
       semver: 7.8.5
       tapable: 2.3.3
       typescript: 5.9.3
-      webpack: 5.106.2(@swc/core@1.16.12)
+      webpack: 5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23))
 
   form-data@4.0.6:
     dependencies:
@@ -11267,15 +11257,15 @@ snapshots:
       inherits: 2.0.4
       readable-stream: 3.6.2
 
-  terser-webpack-plugin@5.6.1(@swc/core@1.16.12)(webpack@5.106.2(@swc/core@1.16.12)):
+  terser-webpack-plugin@5.6.1(@swc/core@1.16.12(@swc/helpers@0.5.23))(webpack@5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23))):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
       schema-utils: 4.5.0
       terser: 5.51.2
-      webpack: 5.106.2(@swc/core@1.16.12)
+      webpack: 5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23))
     optionalDependencies:
-      '@swc/core': 1.16.12
+      '@swc/core': 1.16.12(@swc/helpers@0.5.23)
 
   terser@5.51.2:
     dependencies:
@@ -11327,13 +11317,13 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  ts-loader@9.6.2(typescript@5.9.3)(webpack@5.106.2(@swc/core@1.16.12)):
+  ts-loader@9.6.2(typescript@5.9.3)(webpack@5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23))):
     dependencies:
       chalk: 4.1.2
       picomatch: 4.0.7
       source-map: 0.7.6
       typescript: 5.9.3
-      webpack: 5.106.2(@swc/core@1.16.12)
+      webpack: 5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23))
 
   ts-morph@26.0.0:
     dependencies:
@@ -11359,26 +11349,6 @@ snapshots:
       yn: 3.1.1
     optionalDependencies:
       '@swc/core': 1.16.12(@swc/helpers@0.5.23)
-
-  ts-node@10.9.2(@swc/core@1.16.12)(@types/node@24.19.0)(typescript@5.9.3):
-    dependencies:
-      '@cspotcode/source-map-support': 0.8.1
-      '@tsconfig/node10': 1.0.13
-      '@tsconfig/node12': 1.0.11
-      '@tsconfig/node14': 1.0.3
-      '@tsconfig/node16': 1.0.4
-      '@types/node': 24.19.0
-      acorn: 8.18.0
-      acorn-walk: 8.3.5
-      arg: 4.1.3
-      create-require: 1.1.1
-      diff: 4.0.4
-      make-error: 1.3.6
-      typescript: 5.9.3
-      v8-compile-cache-lib: 3.0.1
-      yn: 3.1.1
-    optionalDependencies:
-      '@swc/core': 1.16.12
 
   tsconfig-paths-webpack-plugin@4.2.0:
     dependencies:
@@ -11451,12 +11421,12 @@ snapshots:
 
   unpipe@1.0.0: {}
 
-  unplugin-swc@1.6.0(@swc/core@1.16.12)(rolldown@1.2.11)(vite@8.3.1(@types/node@24.19.0)(terser@5.51.2))(webpack@5.106.2(@swc/core@1.16.12)):
+  unplugin-swc@1.6.0(@swc/core@1.16.12(@swc/helpers@0.5.23))(rolldown@1.2.11)(vite@8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))(webpack@5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23))):
     dependencies:
       '@rollup/pluginutils': 5.4.0
-      '@swc/core': 1.16.12
+      '@swc/core': 1.16.12(@swc/helpers@0.5.23)
       load-tsconfig: 0.2.5
-      unplugin: 3.4.0(rolldown@1.2.11)(vite@8.3.1(@types/node@24.19.0)(terser@5.51.2))(webpack@5.106.2(@swc/core@1.16.12))
+      unplugin: 3.4.0(rolldown@1.2.11)(vite@8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))(webpack@5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23)))
     transitivePeerDependencies:
       - '@farmfe/core'
       - '@rsbuild/core'
@@ -11469,15 +11439,15 @@ snapshots:
       - vite
       - webpack
 
-  unplugin@3.4.0(rolldown@1.2.11)(vite@8.3.1(@types/node@24.19.0)(terser@5.51.2))(webpack@5.106.2(@swc/core@1.16.12)):
+  unplugin@3.4.0(rolldown@1.2.11)(vite@8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))(webpack@5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23))):
     dependencies:
       '@jridgewell/remapping': 2.3.5
       picomatch: 4.0.7
       webpack-virtual-modules: 0.6.2
     optionalDependencies:
       rolldown: 1.2.11
-      vite: 8.3.1(@types/node@24.19.0)(terser@5.51.2)
-      webpack: 5.106.2(@swc/core@1.16.12)
+      vite: 8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1)
+      webpack: 5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23))
 
   update-browserslist-db@1.3.3(browserslist@4.29.3):
     dependencies:
@@ -11553,7 +11523,7 @@ snapshots:
       terser: 5.51.2
       yaml: 2.9.1
 
-  vite@8.3.1(@types/node@24.19.0)(terser@5.51.2):
+  vite@8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -11563,7 +11533,9 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.19.0
       fsevents: 2.3.3
+      jiti: 2.7.0
       terser: 5.51.2
+      yaml: 2.9.1
 
   vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@20.19.43)(@vitest/coverage-v8@4.1.11)(jsdom@29.1.1(@noble/hashes@1.8.0))(vite@8.3.1(@types/node@20.19.43)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1)):
     dependencies:
@@ -11595,10 +11567,10 @@ snapshots:
     transitivePeerDependencies:
       - msw
 
-  vitest@4.1.11(@types/node@24.19.0)(@vitest/coverage-v8@4.1.11)(vite@8.3.1(@types/node@24.19.0)(terser@5.51.2)):
+  vitest@4.1.11(@opentelemetry/api@1.9.1)(@types/node@24.19.0)(@vitest/coverage-v8@4.1.11)(jsdom@30.1.1(@noble/hashes@1.8.0))(vite@8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1)):
     dependencies:
       '@vitest/expect': 4.1.11
-      '@vitest/mocker': 4.1.11(vite@8.3.1(@types/node@24.19.0)(terser@5.51.2))
+      '@vitest/mocker': 4.1.11(vite@8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1))
       '@vitest/pretty-format': 4.1.11
       '@vitest/runner': 4.1.11
       '@vitest/snapshot': 4.1.11
@@ -11615,11 +11587,13 @@ snapshots:
       tinyexec: 1.3.1
       tinyglobby: 0.2.17
       tinyrainbow: 3.1.1
-      vite: 8.3.1(@types/node@24.19.0)(terser@5.51.2)
+      vite: 8.3.1(@types/node@24.19.0)(jiti@2.7.0)(terser@5.51.2)(yaml@2.9.1)
       why-is-node-running: 2.3.0
     optionalDependencies:
+      '@opentelemetry/api': 1.9.1
       '@types/node': 24.19.0
       '@vitest/coverage-v8': 4.1.11(vitest@4.1.11)
+      jsdom: 30.1.1(@noble/hashes@1.8.0)
     transitivePeerDependencies:
       - msw
 
@@ -11647,7 +11621,7 @@ snapshots:
 
   webpack-virtual-modules@0.6.2: {}
 
-  webpack@5.106.2(@swc/core@1.16.12):
+  webpack@5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23)):
     dependencies:
       '@types/eslint-scope': 3.7.7
       '@types/estree': 1.0.9
@@ -11670,7 +11644,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 4.5.0
       tapable: 2.3.3
-      terser-webpack-plugin: 5.6.1(@swc/core@1.16.12)(webpack@5.106.2(@swc/core@1.16.12))
+      terser-webpack-plugin: 5.6.1(@swc/core@1.16.12(@swc/helpers@0.5.23))(webpack@5.106.2(@swc/core@1.16.12(@swc/helpers@0.5.23)))
       watchpack: 2.5.2
       webpack-sources: 3.6.0
     transitivePeerDependencies:

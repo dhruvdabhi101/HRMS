@@ -81,7 +81,7 @@ Backend: `http://localhost:3001` · Frontend: `http://localhost:3000` · Swagger
 
 ### Demo data and server tests
 
-`pnpm db:seed` creates 10,000 synthetic employees, one initial compensation history entry per employee, and five fixed demo FX rates. It uses `apps/server/.env` through the server config, with the same database as the app. Fixed randomness, IDs, and dates make the generated data repeatable. Salaries vary by country, department, and level, with deliberate outliers; these are not real employee records or market FX quotes.
+`pnpm db:seed` creates 10,000 synthetic employees, one initial compensation history entry per employee, and five fixed demo FX rates. It uses `apps/server/.env` through the server config, with the same database as the app. Names come from seeded, country-specific Faker locales with English fallback. Fixed randomness, IDs, and dates make the generated data repeatable with the pinned Faker version; upgrading Faker may change generated names. Salaries vary by country, department, and level, with deliberate outliers; these are not real employee records or market FX quotes.
 
 The seed runs in one transaction and requires all three application tables to be empty. A rerun exits with an error and preserves existing data; it never resets the database. For a new demo dataset, configure a separate empty database, apply migrations, then seed it. `pnpm db:deploy` applies checked-in migrations without creating new ones.
 

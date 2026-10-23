@@ -1,3 +1,4 @@
+import { en, Faker } from "@faker-js/faker";
 import { CompensationChange, Employee, FxRate, Gender } from "@repo/db";
 import { SEED_COUNTRIES, SEED_DATE, SEED_DEPARTMENTS } from "./seed.constants";
 
@@ -9,7 +10,11 @@ function createRandom() {
 	};
 }
 
-function createEmployee(index: number, random: () => number): Employee {
+function createEmployee(
+	index: number,
+	random: () => number,
+	names: Faker,
+): Employee {
 	const country = SEED_COUNTRIES[index % SEED_COUNTRIES.length];
 	const department =
 		SEED_DEPARTMENTS[
@@ -31,7 +36,7 @@ function createEmployee(index: number, random: () => number): Employee {
 	);
 	return {
 		id: `00000000-0000-4000-8000-${(index + 1).toString(16).padStart(12, "0")}`,
-		name: `${pick(country.firstNames)} ${pick(country.lastNames)}`,
+		name: names.person.fullName(),
 		countryCode: country.countryCode,
 		department: department.name,
 		jobTitle: pick(department.titles),
@@ -68,8 +73,11 @@ function createHistory(employee: Employee): CompensationChange {
 
 export function createSeedData(count: number) {
 	const random = createRandom();
+	const names = SEED_COUNTRIES.map(
+		(country) => new Faker({ locale: [country.locale, en], seed: 42 }),
+	);
 	const employees = Array.from({ length: count }, (_, index) =>
-		createEmployee(index, random),
+		createEmployee(index, random, names[index % names.length]),
 	);
 	const fxRates: FxRate[] = SEED_COUNTRIES.map((country) => ({
 		currencyCode: country.currencyCode,

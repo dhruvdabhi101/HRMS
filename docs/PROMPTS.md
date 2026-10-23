@@ -13,3 +13,7 @@ lets go about implementing first step of the plan.
 ## Prompt 3
 
 Now Let's move to next step in [PLAN.md](docs/PLAN.md)
+
+## Prompt 4
+
+instead of hard coding the names can we just use the https://www.npmjs.com/package/@faker-js/faker, and update the seeder accordingly.

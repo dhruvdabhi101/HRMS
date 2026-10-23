@@ -1,6 +1,15 @@
 import { createSeedData } from "../../src/seed/seed-data";
 
 describe("demo employee generation", () => {
+	it("generates varied names beyond the old 36-name pool per country", () => {
+		const { employees } = createSeedData(250);
+		for (const country of ["US", "IN", "GB", "DE", "CA"]) {
+			const names = employees.filter((employee) => employee.countryCode === country).map((employee) => employee.name);
+			expect(new Set(names).size).toBeGreaterThan(40);
+			expect(names.every((name) => name.trim().length > 0 && name.length <= 120)).toBe(true);
+		}
+	});
+
 	it("reproduces the same employees, FX rates and history without a clock dependency", () => {
 		expect(createSeedData(30)).toEqual(createSeedData(30));
 	});

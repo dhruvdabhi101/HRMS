@@ -1,46 +1,43 @@
+import { de, en_CA, en_GB, en_IN, en_US } from "@faker-js/faker";
+
 export const SEED_DATE = new Date("2026-01-01T00:00:00.000Z");
 export const SEED_EMPLOYEE_COUNT = 10_000;
 
 export const SEED_COUNTRIES = [
 	{
 		countryCode: "US",
+		locale: en_US,
 		currencyCode: "USD",
 		usdRateMicros: 1_000_000,
 		baseUsd: 65_000,
-		firstNames: ["Avery", "Jordan", "Morgan", "Taylor", "Alex", "Casey"],
-		lastNames: ["Smith", "Johnson", "Williams", "Garcia", "Chen", "Davis"],
 	},
 	{
 		countryCode: "IN",
+		locale: en_IN,
 		currencyCode: "INR",
 		usdRateMicros: 12_000,
 		baseUsd: 18_000,
-		firstNames: ["Asha", "Arjun", "Priya", "Rohan", "Kiran", "Sneha"],
-		lastNames: ["Rao", "Shah", "Patel", "Singh", "Iyer", "Das"],
 	},
 	{
 		countryCode: "GB",
+		locale: en_GB,
 		currencyCode: "GBP",
 		usdRateMicros: 1_250_000,
 		baseUsd: 55_000,
-		firstNames: ["Amelia", "Oliver", "Charlie", "Isla", "Sam", "Robin"],
-		lastNames: ["Wilson", "Brown", "Evans", "Clarke", "Ahmed", "Thomas"],
 	},
 	{
 		countryCode: "DE",
+		locale: de,
 		currencyCode: "EUR",
 		usdRateMicros: 1_100_000,
 		baseUsd: 50_000,
-		firstNames: ["Lena", "Felix", "Alex", "Mia", "Luca", "Emil"],
-		lastNames: ["Müller", "Schmidt", "Weber", "Fischer", "Wagner", "Becker"],
 	},
 	{
 		countryCode: "CA",
+		locale: en_CA,
 		currencyCode: "CAD",
 		usdRateMicros: 740_000,
 		baseUsd: 50_000,
-		firstNames: ["Noah", "Emma", "Riley", "Chloé", "Jamie", "Quinn"],
-		lastNames: ["Martin", "Roy", "Tremblay", "Lee", "Bouchard", "Campbell"],
 	},
 ] as const;
 
