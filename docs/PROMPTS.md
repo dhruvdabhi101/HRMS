@@ -222,3 +222,7 @@ Also in documentation pages, we have large titles.. so its looking bad in sideba
 
 Use $apple-design  for better ui experience 
 $frontend  use this skill if needed as well
+
+## Prompt 23
+
+lets finish step 8 and then 9. I guess 9th is already done since it is already deployed.. after 8th changes we'll be deploying that as wel.
