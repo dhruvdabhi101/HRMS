@@ -15,3 +15,5 @@ export const payMetricSql: Record<PayMetric, Prisma.Sql> = {
 	median: Prisma.sql`CAST(ROUND(AVG(CASE WHEN position IN ((groupSize + 1) / 2, (groupSize + 2) / 2) THEN baseUsd END), 0) AS INTEGER)`,
 	totalTarget: Prisma.sql`SUM(targetUsd)`,
 };
+
+export const baseUsdSql = Prisma.sql`(e.annualBaseMinor * f.usdRateMicros + 500000) / 1000000`;

@@ -1,16 +1,9 @@
 import { Prisma } from "@repo/db";
 import { PayGroupsQueryDto } from "./dto/pay-groups-query.dto";
 import { payDimensionSql, payMetricSql } from "./insights.constants";
+import { activePayWhere } from "./pay-cohort.sql";
 
 export function payGroupsSql(query: PayGroupsQueryDto) {
-	const conditions = [Prisma.sql`e.status = 'active'`];
-	if (query.countryCode)
-		conditions.push(Prisma.sql`e.countryCode = ${query.countryCode}`);
-	if (query.department)
-		conditions.push(Prisma.sql`e.department = ${query.department}`);
-	if (query.jobTitle)
-		conditions.push(Prisma.sql`e.jobTitle = ${query.jobTitle}`);
-	if (query.level) conditions.push(Prisma.sql`e.level = ${query.level}`);
 	const first = payDimensionSql[query.dimensions[0]];
 	const second = query.dimensions[1]
 		? payDimensionSql[query.dimensions[1]]
@@ -21,7 +14,7 @@ export function payGroupsSql(query: PayGroupsQueryDto) {
 				e.annualBaseMinor + (e.annualBaseMinor * e.bonusTargetBps + 5000) / 10000 AS targetMinor,
 				f.usdRateMicros
 			FROM Employee e JOIN FxRate f ON f.currencyCode = e.currencyCode
-			WHERE ${Prisma.join(conditions, " AND ")}
+			WHERE ${activePayWhere(query)}
 		), usd_pay AS (
 			SELECT d1, d2, (baseMinor * usdRateMicros + 500000) / 1000000 AS baseUsd,
 				(targetMinor * usdRateMicros + 500000) / 1000000 AS targetUsd

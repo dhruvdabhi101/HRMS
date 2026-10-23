@@ -28,3 +28,65 @@ export interface PayGroupsResponse {
 	fxRates: PayFxRate[];
 	groups: PayGroup[];
 }
+
+export type PayFilters = Pick<
+	EmployeeDirectoryQuery,
+	"countryCode" | "department" | "jobTitle" | "level"
+>;
+export interface PayDistributionQuery extends PayFilters {
+	employeeId?: string;
+	page?: number;
+	pageSize?: number;
+}
+export interface PayDistributionSummary {
+	headcount: number;
+	min: number;
+	q1: number;
+	median: number;
+	average: number;
+	q3: number;
+	max: number;
+	lowerWhisker: number;
+	upperWhisker: number;
+	lowerFence: number;
+	upperFence: number;
+	outlierCount: number;
+	smallSample: boolean;
+}
+export interface PayOutlier {
+	id: string;
+	name: string;
+	annualBaseUsd: number;
+}
+export interface EmployeePayPosition extends PayOutlier {
+	status: "active" | "terminated";
+	includedInCohort: boolean;
+	isOutlier: boolean | null;
+}
+export interface PayDistributionResponse {
+	currencyCode: "USD";
+	fxRates: PayFxRate[];
+	summary: PayDistributionSummary | null;
+	employee: EmployeePayPosition | null;
+	outliers: {
+		items: PayOutlier[];
+		totalCount: number;
+		page: number;
+		pageSize: number;
+	};
+}
+export interface GenderPayGroup {
+	level: NonNullable<PayFilters["level"]>;
+	genders: {
+		gender: "woman" | "man" | "non_binary" | "undisclosed";
+		headcount: number;
+		median: number;
+	}[];
+	gapPercent: number | null;
+	smallSample: boolean;
+}
+export interface GenderPayResponse {
+	currencyCode: "USD";
+	fxRates: PayFxRate[];
+	groups: GenderPayGroup[];
+}

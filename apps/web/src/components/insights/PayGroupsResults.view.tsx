@@ -7,6 +7,7 @@ import {
 import { CustomTable } from "@repo/ui/general/CustomTable";
 import type { ColumnDef } from "@tanstack/react-table";
 import { formatPayValue, payDimensionValue } from "@/utils";
+import { PayFxBasis } from "./PayFxBasis.view";
 import { PayGroupsChart } from "./PayGroupsChart.view";
 
 export function PayGroupsResults({ report }: { report: PayGroupsResponse }) {
@@ -38,15 +39,7 @@ export function PayGroupsResults({ report }: { report: PayGroupsResponse }) {
 					target compensation includes target bonus; excludes taxes, benefits
 					and actual payouts.
 				</p>
-				<p className="text-sm text-muted-foreground">
-					Synthetic fixed FX rates · USD per local unit ·{" "}
-					{report.fxRates
-						.map(
-							(rate) =>
-								`${rate.currencyCode} ${(rate.usdRateMicros / 1_000_000).toFixed(6)} (${rate.asOfDate})`,
-						)
-						.join(" · ")}
-				</p>
+				<PayFxBasis rates={report.fxRates} />
 			</div>
 			<CustomTable
 				data={report.groups}

@@ -4,10 +4,14 @@ import {
 	NativeSelectOption,
 } from "@repo/ui/components/native-select";
 import RequiredStar from "@repo/ui/general/RequiredStar";
-import { type Control, Controller } from "react-hook-form";
-import type { PayExplorerValues } from "@/validations";
+import {
+	type Control,
+	Controller,
+	type FieldValues,
+	type Path,
+} from "react-hook-form";
 
-export function PayExplorerField({
+export function PayExplorerField<Values extends FieldValues>({
 	control,
 	name,
 	label,
@@ -15,8 +19,8 @@ export function PayExplorerField({
 	required = false,
 	disabled = false,
 }: {
-	control: Control<PayExplorerValues>;
-	name: keyof PayExplorerValues;
+	control: Control<Values>;
+	name: Path<Values>;
 	label: string;
 	options: { value: string; label: string }[];
 	required?: boolean;

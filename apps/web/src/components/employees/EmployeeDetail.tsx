@@ -6,6 +6,7 @@ import { Skeleton } from "@repo/ui/components/skeleton";
 import AlertMessage from "@repo/ui/general/AlertMessage";
 import LoadingButton from "@repo/ui/general/LoadingButton";
 import Link from "next/link";
+import { PayDistributionPanel } from "@/components/insights/PayDistributionPanel";
 import { useBreadcrumbLabel } from "@/hooks/use-breadcrumb-label";
 import { ApiError } from "@/lib/api-error";
 import { useEmployee } from "@/queries";
@@ -97,6 +98,7 @@ export function EmployeeDetail({
 			) : (
 				<AlertMessage message="This employee is terminated. Their record and compensation history are read-only." />
 			)}
+			<PayDistributionPanel key={data.id} employee={data} />
 			<CompensationHistoryView changes={data.compensationChanges} />
 			<Link
 				href="/employees/new"

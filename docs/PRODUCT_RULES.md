@@ -86,6 +86,8 @@ Acceptance examples:
 - `[10, 20, 30, 40]` gives Q1 17.5 and Q3 32.5, with no outliers.
 - `[10]` has min/Q1/median/Q3/max 10, but outlier classification is suppressed. `[20, 20, 20, 20]` has no outliers.
 
+Employee detail pages also show the employee's current annual base USD on a box-and-whisker plot, with min/max, Q1/Q3, median, and average (mean) markers. Default the comparison to active employees in their country; allow country, department, title, and level filters combined with AND. Include the selected employee in cohort statistics only if active and matching those filters. Keep a visible salary marker for a terminated or outside-filter employee, clearly labelled as excluded from the cohort, with no outlier classification. With no matching peers, show an empty comparison and the employee's salary rather than invented statistics. Whiskers end at the lowest/highest inlier; show the full min/max range separately. If the marker lies beyond that range, extend the axis to keep it visible. Raw interpolated statistics may include fractional USD cents; round only formatted display values.
+
 ## 7. Gender comparison
 
 Show median annual base USD by gender within each level, with optional country, department, and title filters. Always show group sizes. Display non-binary and undisclosed groups with their medians/counts, but exclude them from the women-versus-men percentage calculation. Do not infer gender from names.

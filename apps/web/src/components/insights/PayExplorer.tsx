@@ -11,6 +11,7 @@ import AlertMessage from "@repo/ui/general/AlertMessage";
 import LoadingButton from "@repo/ui/general/LoadingButton";
 import { PageContainer } from "@repo/ui/general/PageContainer";
 import { usePayExplorer } from "@/hooks";
+import { InsightsNav } from "./InsightsNav.view";
 import { PayExplorerControls } from "./PayExplorerControls";
 import { PayGroupsResults } from "./PayGroupsResults.view";
 
@@ -25,6 +26,7 @@ export function PayExplorer() {
 					Compare pay across countries, departments, levels and job titles.
 				</p>
 			</div>
+			<InsightsNav current="groups" />
 			<PayExplorerControls explorer={explorer} />
 			<section
 				className="min-w-0"

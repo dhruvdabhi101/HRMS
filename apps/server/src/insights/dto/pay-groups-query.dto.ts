@@ -1,4 +1,4 @@
-import { ApiPropertyOptional, PickType } from "@nestjs/swagger";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 import { PAY_DIMENSIONS, PAY_METRICS, PayGroupsQuery } from "@repo/shared";
 import { Transform } from "class-transformer";
 import {
@@ -8,15 +8,10 @@ import {
 	IsArray,
 	IsIn,
 } from "class-validator";
-import { EmployeeDirectoryQueryDto } from "../../employees/dto/employee-directory-query.dto";
+import { PayFiltersQueryDto } from "./pay-filters-query.dto";
 
 export class PayGroupsQueryDto
-	extends PickType(EmployeeDirectoryQueryDto, [
-		"countryCode",
-		"department",
-		"jobTitle",
-		"level",
-	] as const)
+	extends PayFiltersQueryDto
 	implements PayGroupsQuery
 {
 	@ApiPropertyOptional({

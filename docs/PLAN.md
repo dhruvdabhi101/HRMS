@@ -12,7 +12,7 @@ Design references: [database diagram](DATABASE.md) and [application architecture
 - [ ] Refactor with tests green; repeat for the next behavior.
 - [ ] Connect the UI and manually verify the affected workflow and applicable loading, empty, error, and validation states. No new automated UI tests for now.
 - [ ] Run relevant tests and `pnpm ready`; inspect the diff for unrelated changes.
-- [ ] Commit the completed behavior with a descriptive message. For steps 5–7, the user requested a separate failing test commit before implementation; keep later implementation commits passing.
+- [ ] Commit the completed behavior with a descriptive message. For steps 5–8, the user requested a separate failing test commit before implementation; keep later implementation commits passing.
 
 Use unit tests for isolated business calculations and integration tests with isolated SQLite databases for persistence, queries, and transactions. Prefer small fixtures with hand-calculated answers over the 10,000-row demo dataset. Avoid tests of framework wiring, trivial delegation, private implementation details, or coverage metrics alone.
 
@@ -148,6 +148,8 @@ Manual Chrome checks used a separate seven-employee synthetic SQLite fixture (si
 Final verification exposed intermittent HTTP 401/404 responses from local test listeners. A standalone Node probe reproduced an IPv6 wildcard listener receiving an IPv4 response from a different local service (1 mismatch in 200 probes); Supertest rewrites wildcard IPv6 addresses to IPv4 loopback. All five HTTP fixtures now explicitly listen on `127.0.0.1` until teardown. The same 200-probe check then had zero mismatches, and three consecutive complete server-suite runs passed without weakening assertions. Temporary diagnostic logging, browser tabs, servers, and fixture data were removed.
 
 ## 8. Distribution and gender comparisons
+
+- [ ] Add a filterable employee pay-position box plot on each detail page, reusing distribution statistics with a highlighted salary, median, average, and explicit cohort membership.
 
 - [ ] Test distribution summaries, the agreed quartile/outlier rule, ties, empty groups, and small groups against explicit expected values.
 - [ ] Implement database-side distribution calculations and a view that makes the spread and outliers visible.

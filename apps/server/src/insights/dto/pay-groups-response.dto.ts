@@ -19,7 +19,7 @@ class PayGroupDto implements PayGroup {
 	})
 	value: number;
 }
-class PayFxRateDto implements PayFxRate {
+export class PayFxRateDto implements PayFxRate {
 	@ApiProperty() currencyCode: string;
 	@ApiProperty() usdRateMicros: number;
 	@ApiProperty({ example: "2026-01-01" }) asOfDate: string;

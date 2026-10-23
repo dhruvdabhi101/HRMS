@@ -20,8 +20,8 @@ instead of hard coding the names can we just use the https://www.npmjs.com/packa
 
 ## Prompt 5
 
-I've tried running db:generate, db:migrate and db:deploy command and then seed command, first 3 succeeds and seed command fails 
-Giving this output: 
+I've tried running db:generate, db:migrate and db:deploy command and then seed command, first 3 succeeds and seed command fails
+Giving this output:
 
 ➜  incubyte-hr-mgmt git:(main) ✗ npm run db:seed
 
@@ -36,19 +36,19 @@ $ ts-node -r tsconfig-paths/register src/seed.ts
 [ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] server@0.0.1 db:seed: `ts-node -r tsconfig-paths/register src/seed.ts`
 Exit status 1
 
-are we having correct path 
+are we having correct path
 DATABASE_URL=file:../../packages/db/prisma/dev.db
 
 this is the db url that i'm using as of now
 
 ## Prompt 6
 
-Okay got it. now lets move onto 3rd step of the [PLAN.md](docs/PLAN.md) 
+Okay got it. now lets move onto 3rd step of the [PLAN.md](docs/PLAN.md)
 I've check the db. and everything looks correct.
 
 ## Prompt 7
 
-2 quick things, got this error 
+2 quick things, got this error
 GET / 200 in 515ms (next.js: 329ms, application-code: 186ms)
 [browser] Encountered a script tag while rendering React component. Scripts inside React components are never executed when rendering on the client. Consider using template tag instead (https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template).
 [browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
@@ -117,11 +117,11 @@ and another one was.. when clicked on documentation tab.. it was overlapping wit
 
 ## Prompt 8
 
-ohh.. the issue is with the text length of the docs.. otherwise its fine. 
-We'll keep names properly going forwards in the docs.. 
-lets move to next step in plan. 
-in that we'll need good grid solutions.. I've ag-grid in mind..also see if shadcn grid/tables are enough for our usecase. 
-tanstack tables are also good.. 
+ohh.. the issue is with the text length of the docs.. otherwise its fine.
+We'll keep names properly going forwards in the docs..
+lets move to next step in plan.
+in that we'll need good grid solutions.. I've ag-grid in mind..also see if shadcn grid/tables are enough for our usecase.
+tanstack tables are also good..
 lets give me a comparison table for each 3 and i'll make decision based on these on our usecase
 
 ## Prompt 9
@@ -146,11 +146,11 @@ first implement tests.. commit those tests.. and then implement feature around i
 
 ## Prompt 12
 
-let's move to next step of the plan.. follow the same steps. 
+let's move to next step of the plan.. follow the same steps.
 write tests first with edge cases and then implement..
 once done lets do overall review of the progress (code review and security review on any edge cases if we missed in implementation)
 
-$code-review 
+$code-review
 $security-audit
 
 ## Prompt 13
@@ -169,3 +169,16 @@ if everything is completed.. then pls move forward and give me findings
 ## Prompt 16
 
 Let's move to next step in [PLAN.md](docs/PLAN.md)
+
+## Prompt 17
+
+Let's move to next step.. this looks good..
+Now onto 8th step..
+but before that.. let's add one more feature in each employee's page..
+where do they lie actually on pay.. so will give all the filters
+- we will show one line, highlighting min, max range.. where does avg lie, where does mean like.. and where employee's salary lie.. out of their country's employees, or department etc.. i forgot the same of this diagram.. but it is also used to identify outliers in statistics..
+- then go about doing 8th step properly.. write tests, commit, and implement..
+
+## Prompt 18
+
+continue...
