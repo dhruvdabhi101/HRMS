@@ -111,6 +111,16 @@ Always run `pnpm ready` for the changed work.
 
 If it fails and the issue is caused by your change, fix it before considering the task complete.
 
+### Testing approach
+
+- Follow [the implementation plan](docs/PLAN.md). Use test-driven development for server business rules and bug fixes: write one behavior-focused test, confirm it fails for the expected reason, implement the smallest passing change, then refactor.
+- Focus automated testing on the server. No new UI/component, frontend hook, or browser automation tests are required for now unless explicitly requested. Preserve existing tests; manually verify changed UI flows, including loading, empty, error, and validation states.
+- Every test must protect a concrete business rule, API contract, data integrity guarantee, or plausible regression. Be able to name the failure it would catch. Do not add tests solely to increase coverage.
+- Use unit tests for isolated calculations and rules. Use integration tests against isolated SQLite databases for SQL queries, filtering, persistence, and transaction rollback; mocked Prisma calls cannot prove database behavior.
+- Keep fixtures small and explicit, with independently calculated expected results. Control randomness and time where relevant, isolate test state, and never use the development or deployed database for tests.
+- Assert observable results rather than private methods, internal call order, or framework wiring. Avoid trivial pass-through tests, broad snapshots, and duplicating the same assertion at every layer. Mock external boundaries only when needed.
+- Run relevant automated tests as well as `pnpm ready` after code changes; `pnpm ready` does not run tests. Do not weaken coverage settings or delete meaningful tests to make checks pass.
+
 ---
 
 ## 6. Code Quality & Modularity
