@@ -16,7 +16,9 @@ export function EmployeePayPosition({
 	employee: EmployeeDetail;
 }) {
 	const groups = employeeComparisonGroups(employee);
-	const [selected, setSelected] = useState(groups[0]);
+	const [selectedFilter, setSelectedFilter] = useState(groups[0].filter);
+	const selected =
+		groups.find((group) => group.filter === selectedFilter) ?? groups[0];
 	const report = usePayDistribution({
 		[selected.filter]: selected.value,
 		employeeId: employee.id,
@@ -37,7 +39,7 @@ export function EmployeePayPosition({
 					value={[selected.filter]}
 					onValueChange={([filter]) => {
 						const next = groups.find((group) => group.filter === filter);
-						if (next) setSelected(next);
+						if (next) setSelectedFilter(next.filter);
 					}}
 				>
 					{groups.map((group) => (
@@ -52,7 +54,7 @@ export function EmployeePayPosition({
 				</ToggleGroup>
 			</div>
 			<div aria-busy={report.isFetching} className="min-h-36">
-				{report.isPending ? (
+				{report.isPending || report.isPlaceholderData ? (
 					<Skeleton
 						role="status"
 						aria-label="Loading comparison"
@@ -74,15 +76,10 @@ export function EmployeePayPosition({
 						</LoadingButton>
 					</div>
 				) : (
-					<div
-						className="transition-opacity duration-200 data-[stale=true]:opacity-60"
-						data-stale={report.isPlaceholderData}
-					>
-						<EmployeePayPositionView
-							report={report.data}
-							groupLabel={selected.valueLabel}
-						/>
-					</div>
+					<EmployeePayPositionView
+						report={report.data}
+						groupLabel={selected.valueLabel}
+					/>
 				)}
 			</div>
 		</section>

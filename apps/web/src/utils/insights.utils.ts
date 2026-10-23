@@ -57,12 +57,14 @@ export function employeeComparisonGroups(employee: EmployeeDetail) {
 	}[];
 }
 export function describeMedianPosition(valueUsd: number, medianUsd: number) {
+	if (valueUsd === medianUsd) return "At the median";
 	if (medianUsd === 0)
 		return valueUsd > 0 ? "Above the median" : "At the median";
 	const percent = Math.round(
 		(Math.abs(valueUsd - medianUsd) / medianUsd) * 100,
 	);
-	if (percent === 0) return "At the median";
+	if (percent === 0)
+		return `Less than 1% ${valueUsd > medianUsd ? "above" : "below"} the median`;
 	if (valueUsd > medianUsd) return `${percent}% above the median`;
 	// A positive salary rounded to "100% below" would read as zero pay.
 	return `${valueUsd > 0 ? Math.min(percent, 99) : percent}% below the median`;
