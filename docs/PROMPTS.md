@@ -208,3 +208,17 @@ https://nuqs.dev/docs/installation.md
 check this and lets implement for our employee data table.. 
 
 Also lets increase the width of the table..
+
+## Prompt 22
+
+can we also add this in plan or requiredment file that we are deliberatly leaving out option for rehire 
+and option for future hire or future joining date. 
+
+- remove add another eomployee button from employee specific page
+
+and render mermaid diagrams and put them in md files so we can read from documentation pages accordingly 
+
+Also in documentation pages, we have large titles.. so its looking bad in sidebar.. so please improve UI on that front.. 
+
+Use $apple-design  for better ui experience 
+$frontend  use this skill if needed as well
