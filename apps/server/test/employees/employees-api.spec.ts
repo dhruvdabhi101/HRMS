@@ -76,6 +76,26 @@ describe("employee create/detail API", () => {
 		expect(await database.prisma.employee.count()).toBe(2);
 	});
 
+	it.each(Object.keys(validEmployee))("rejects missing or null required create field %s without partial records", async (field) => {
+		const missing: Record<string, unknown> = { ...validEmployee };
+		delete missing[field];
+		for (const payload of [missing, { ...validEmployee, [field]: null }]) {
+			const { body } = await request(app.getHttpServer()).post("/api/employees").send(payload).expect(400);
+			expect(body.fieldErrors[field]).toBeTruthy();
+		}
+		expect(await database.prisma.employee.count()).toBe(0);
+		expect(await database.prisma.compensationChange.count()).toBe(0);
+	});
+
+	it("preserves non-Latin names and punctuation at the minimum salary boundary", async () => {
+		const { body } = await request(app.getHttpServer()).post("/api/employees").send({ ...validEmployee, name: " 李明 O'Neil ", annualBaseMinor: 1, bonusTargetBps: 0 }).expect(201);
+		expect(body).toMatchObject({ name: "李明 O'Neil", annualBaseMinor: 1, bonusMinor: 0, targetMinor: 1 });
+	});
+
+	it("rejects malformed detail IDs", async () => {
+		await request(app.getHttpServer()).get("/api/employees/not-a-uuid").expect(400);
+	});
+
 	it("returns 404 for an unknown employee", async () => {
 		await request(app.getHttpServer()).get("/api/employees/00000000-0000-4000-8000-000000000001").expect(404);
 	});
