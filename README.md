@@ -72,10 +72,25 @@ The defaults work for local development. `DATABASE_URL` points to the SQLite fil
 
 ```bash
 pnpm db:migrate
+pnpm db:generate
+pnpm db:seed
 pnpm dev
 ```
 
 Backend: `http://localhost:3001` · Frontend: `http://localhost:3000` · Swagger: `http://localhost:3001/docs`
+
+### Demo data and server tests
+
+`pnpm db:seed` creates 10,000 synthetic employees, one initial compensation history entry per employee, and five fixed demo FX rates. It uses `apps/server/.env` through the server config, with the same database as the app. Fixed randomness, IDs, and dates make the generated data repeatable. Salaries vary by country, department, and level, with deliberate outliers; these are not real employee records or market FX quotes.
+
+The seed runs in one transaction and requires all three application tables to be empty. A rerun exits with an error and preserves existing data; it never resets the database. For a new demo dataset, configure a separate empty database, apply migrations, then seed it. `pnpm db:deploy` applies checked-in migrations without creating new ones.
+
+```bash
+pnpm --filter server test  # business-rule and SQLite integration tests
+pnpm ready                # generation, lint, and typecheck; does not run tests
+```
+
+Integration tests apply the checked-in migration SQL to temporary SQLite files and remove them afterward. They do not use the development database. Routine tests use small fixtures; the full 10,000-row seed is verified separately. Calculation and input decisions are in [docs/PRODUCT_RULES.md](docs/PRODUCT_RULES.md).
 
 ---
 

@@ -29,19 +29,21 @@ V1 decisions and worked acceptance examples are recorded in [PRODUCT_RULES.md](P
 - [x] Define gender groups, gap formula/reference, missing/zero-reference behavior, counts, and small-sample notes.
 - [x] Define API/UI performance boundaries, environment, query cases, sample counts, and percentile reporting.
 
-Verification: each rule has a concrete expected-result example in PRODUCT_RULES.md. Runtime tests and performance measurements have not yet been performed.
+Verification: each rule has a concrete expected-result example in PRODUCT_RULES.md. Executable checks and performance measurements are tracked in the implementation steps below.
 
 ## 2. Data foundation and repeatable seed
 
-- [ ] Add the minimal employee, compensation history, and static FX schema and required indexes. Keep current compensation on the employee unless a concrete requirement needs separation.
-- [ ] Create/apply migrations with `pnpm db:migrate`, then run `pnpm db:generate`.
-- [ ] Establish a minimal isolated SQLite test setup using the application schema, with cleanup and no access to development/deployed data.
-- [ ] Use TDD for monetary and bonus calculations, including fractional results and rounding boundaries.
-- [ ] Build a deterministic seed generating 10,000 employees across countries, departments, titles, levels, genders, and statuses, with plausible salary variation and deliberate outliers.
-- [ ] Define safe seed rerun behavior; avoid implicit deletion of existing data.
-- [ ] Verify seed count, supported currency relationships, valid compensation, and repeatability; keep the full seed out of routine unit tests.
+- [x] Add the minimal employee, compensation history, and static FX schema and required indexes. Keep current compensation on the employee unless a concrete requirement needs separation.
+- [x] Create/apply migrations with `pnpm db:migrate`, then run `pnpm db:generate`.
+- [x] Establish a minimal isolated SQLite test setup using the application schema, with cleanup and no access to development/deployed data.
+- [x] Use TDD for monetary and bonus calculations, including fractional results and rounding boundaries.
+- [x] Build a deterministic seed generating 10,000 employees across countries, departments, titles, levels, genders, and statuses, with plausible salary variation and deliberate outliers.
+- [x] Define safe seed rerun behavior; avoid implicit deletion of existing data.
+- [x] Verify seed count, supported currency relationships, valid compensation, and repeatability; keep the full seed out of routine unit tests.
 
 Verification: a fresh database migrates and seeds successfully, and small deterministic tests establish calculation correctness.
+
+Verified locally: 10,000 employees (9,090 active / 910 terminated), 10,000 matching initial history entries, and five FX rates. Full generation is repeatable, salary limits and country/currency mappings hold, foreign keys are valid, and seed reruns refuse to overwrite data. SQLite tests verify rollback and history-preserving foreign keys. No API or UI employee workflows are implemented in this step.
 
 ## 3. Create an employee and establish history
 

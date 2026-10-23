@@ -9,3 +9,7 @@ from this point onwards.. let maintain a file of prompts that i give. also updat
 ## Prompt 2
 
 lets go about implementing first step of the plan.
+
+## Prompt 3
+
+Now Let's move to next step in [PLAN.md](docs/PLAN.md)
