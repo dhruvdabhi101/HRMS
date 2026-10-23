@@ -17,3 +17,26 @@ Now Let's move to next step in [PLAN.md](docs/PLAN.md)
 ## Prompt 4
 
 instead of hard coding the names can we just use the https://www.npmjs.com/package/@faker-js/faker, and update the seeder accordingly.
+
+## Prompt 5
+
+I've tried running db:generate, db:migrate and db:deploy command and then seed command, first 3 succeeds and seed command fails 
+Giving this output: 
+
+➜  incubyte-hr-mgmt git:(main) ✗ npm run db:seed
+
+> master-template@1.0.0 db:seed
+> pnpm --filter server db:seed
+
+$ ts-node -r tsconfig-paths/register src/seed.ts
+[Nest] 8178  - 23/10/2026, 9:51:16 am     LOG [NestFactory] Starting Nest application...
+[Nest] 8178  - 23/10/2026, 9:51:16 am     LOG [InstanceLoader] PrismaModule dependencies initialized +4ms
+[Nest] 8178  - 23/10/2026, 9:51:16 am   ERROR [Seed] Seeding requires an empty database; existing data was not changed.
+/Users/dhruv/scratchpad/work/incubyte-hr-mgmt/apps/server:
+[ERR_PNPM_RECURSIVE_RUN_FIRST_FAIL] server@0.0.1 db:seed: `ts-node -r tsconfig-paths/register src/seed.ts`
+Exit status 1
+
+are we having correct path 
+DATABASE_URL=file:../../packages/db/prisma/dev.db
+
+this is the db url that i'm using as of now
