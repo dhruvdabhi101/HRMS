@@ -195,3 +195,8 @@ so no filters are required at this point.
 also use /apple-design  to improve the design
 
 and remove heizen branding from the code everywhere.. and lets say HRMS instead
+
+## Prompt 20
+
+we have UI issue as of now.. whole table is scrollable.. instead it's entries should be scrollable.. and pagination should be accessible without the scroll.. right now we need to scroll to access the pagination..
+let's fix this.

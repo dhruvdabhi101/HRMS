@@ -15,6 +15,7 @@ import {
 	TableRow,
 } from "@repo/ui/components/table";
 import PaginationControls from "@repo/ui/general/PaginationControls";
+import { cn } from "@repo/ui/lib/utils";
 import {
 	type ColumnDef,
 	type ColumnFiltersState,
@@ -36,6 +37,8 @@ interface CustomTableProps<TData> {
 	enableSorting?: boolean;
 	enableFiltering?: boolean;
 	enablePagination?: boolean;
+	/** Fill the parent's height and scroll rows under a sticky header, keeping pagination visible. */
+	scrollable?: boolean;
 	className?: string;
 	emptyState?: React.ReactNode;
 
@@ -71,6 +74,7 @@ export function CustomTable<TData>({
 	enableSorting = false,
 	enableFiltering = false,
 	enablePagination = false,
+	scrollable = false,
 	className = "",
 	emptyState,
 	state = "idle",
@@ -253,10 +257,20 @@ export function CustomTable<TData>({
 	};
 
 	return (
-		<div>
-			<div className={`overflow-hidden border ${className}`}>
-				<Table>
-					<TableHeader className="bg-muted">
+		<div className={cn(scrollable && "flex min-h-0 flex-1 flex-col")}>
+			<div
+				className={cn(
+					"overflow-hidden border",
+					scrollable && "flex min-h-0 flex-1 flex-col",
+					className,
+				)}
+			>
+				<Table
+					containerClassName={cn(scrollable && "min-h-0 flex-1 overflow-auto")}
+				>
+					<TableHeader
+						className={cn("bg-muted", scrollable && "sticky top-0 z-10")}
+					>
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
 								{headerGroup.headers.map((header) => (

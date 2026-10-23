@@ -29,7 +29,7 @@ export function EmployeeDirectory() {
 	} = useEmployeeDirectory();
 	const { data, isLoading, isError, error, refetch } = employees;
 	return (
-		<PageContainer className="min-w-0 space-y-6">
+		<PageContainer className="flex h-[calc(100dvh-4rem)] min-h-[36rem] min-w-0 flex-col gap-6">
 			<div className="flex flex-wrap items-center justify-between gap-3">
 				<div>
 					<h1 className="text-2xl font-semibold">Employees</h1>
@@ -59,7 +59,7 @@ export function EmployeeDirectory() {
 				onFilter={changeFilter}
 				onClear={clearFilters}
 			/>
-			<div className="space-y-3" aria-busy={isLoading}>
+			<div className="flex min-h-0 flex-1 flex-col gap-3" aria-busy={isLoading}>
 				<p className="text-muted-foreground text-sm" role="status">
 					{isLoading
 						? "Loading employees…"
@@ -72,6 +72,7 @@ export function EmployeeDirectory() {
 					columns={employeeDirectoryColumns}
 					enableSorting
 					enablePagination
+					scrollable
 					sortingMode="server"
 					paginationMode="server"
 					currentPage={query.page}
