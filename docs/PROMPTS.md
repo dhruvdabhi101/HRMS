@@ -200,3 +200,11 @@ and remove heizen branding from the code everywhere.. and lets say HRMS instead
 
 we have UI issue as of now.. whole table is scrollable.. instead it's entries should be scrollable.. and pagination should be accessible without the scroll.. right now we need to scroll to access the pagination..
 let's fix this.
+
+## Prompt 21
+
+we need to implement persistent queries on page refreshes.. 
+https://nuqs.dev/docs/installation.md
+check this and lets implement for our employee data table.. 
+
+Also lets increase the width of the table..
