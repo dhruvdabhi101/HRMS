@@ -1,21 +1,12 @@
 "use client";
 
+import { Button } from "@repo/ui/components/button";
 import {
-	Pagination,
-	PaginationContent,
-	PaginationItem,
-	PaginationLink,
-} from "@repo/ui/components/pagination";
-import {
-	Select,
-	SelectContent,
-	SelectItem,
-	SelectTrigger,
-	SelectValue,
-} from "@repo/ui/components/select";
-import { cn } from "@repo/ui/lib/utils";
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react";
-import { useEffect } from "react";
+	NativeSelect,
+	NativeSelectOption,
+} from "@repo/ui/components/native-select";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useId } from "react";
 
 export interface PaginationData {
 	currentPage: number;
@@ -32,12 +23,7 @@ const PaginationControls = ({
 	limit,
 	setLimit,
 }: PaginationData) => {
-	useEffect(() => {
-		if (pageCount > 0 && currentPage > pageCount) {
-			goToPage(pageCount);
-		}
-	}, [pageCount, currentPage, goToPage]);
-
+	const pageSizeId = useId();
 	const getVisiblePages = () => {
 		if (pageCount <= 7) {
 			return Array.from({ length: pageCount }, (_, index) => index + 1);
@@ -72,77 +58,69 @@ const PaginationControls = ({
 		return pages;
 	};
 
-	if (pageCount <= 1) {
-		return null;
-	}
-
-	const pageSizeOptions = [10, 20, 30, 40];
-
 	return (
-		<Pagination className="mt-4 flex flex-1 justify-between">
-			<PaginationContent className="flex items-center gap-1">
-				<ChevronLeft
-					onClick={() => currentPage > 1 && goToPage(currentPage - 1)}
-					className={cn(
-						"cursor-pointer",
-						currentPage === 1 &&
-							"text-muted-foreground hover:text-muted-foreground",
-					)}
-				/>
-
-				{getVisiblePages().map((page) => (
-					<PaginationItem key={page}>
-						{page === "ellipsis" ? (
-							<div className="flex h-8 w-8 items-center justify-center">
-								<MoreHorizontal className="text-muted-foreground h-4 w-4" />
-							</div>
-						) : (
-							<PaginationLink
-								onClick={() => goToPage(page as number)}
-								isActive={page === currentPage}
-								className={cn(
-									"h-8 w-8 cursor-pointer transition-colors",
-									page === currentPage
-										? "text-primary border-foreground/30 border bg-transparent"
-										: "",
-								)}
-							>
-								{page}
-							</PaginationLink>
-						)}
-					</PaginationItem>
-				))}
-
-				<ChevronRight
-					onClick={() => currentPage < pageCount && goToPage(currentPage + 1)}
-					className={cn(
-						"cursor-pointer",
-						currentPage === pageCount &&
-							"text-muted-foreground hover:text-muted-foreground",
-					)}
-				/>
-			</PaginationContent>
-			<PaginationContent className="flex items-center gap-1">
-				<div className="flex items-center gap-4">
-					<p className="text-muted-foreground text-sm">Items per page</p>
-					<Select
-						defaultValue={`${limit}`}
-						onValueChange={(value) => setLimit(Number(value))}
-					>
-						<SelectTrigger className="w-20">
-							<SelectValue placeholder="Select an item" />
-						</SelectTrigger>
-						<SelectContent>
-							{pageSizeOptions.map((option) => (
-								<SelectItem key={option} value={`${option}`}>
-									{option}
-								</SelectItem>
-							))}
-						</SelectContent>
-					</Select>
-				</div>
-			</PaginationContent>
-		</Pagination>
+		<nav
+			aria-label="Table pagination"
+			className="mt-4 flex flex-wrap items-center justify-between gap-4"
+		>
+			<div className="flex flex-wrap items-center gap-1">
+				<Button
+					variant="outline"
+					size="icon-sm"
+					aria-label="Previous page"
+					disabled={currentPage <= 1}
+					onClick={() => goToPage(currentPage - 1)}
+				>
+					<ChevronLeft />
+				</Button>
+				{getVisiblePages().map((page, index) =>
+					page === "ellipsis" ? (
+						<span key={`ellipsis-${index}`} className="px-1" aria-hidden="true">
+							…
+						</span>
+					) : (
+						<Button
+							key={page}
+							variant={page === currentPage ? "secondary" : "ghost"}
+							size="sm"
+							aria-label={`Page ${page}`}
+							aria-current={page === currentPage ? "page" : undefined}
+							onClick={() => goToPage(page)}
+						>
+							{page}
+						</Button>
+					),
+				)}
+				<Button
+					variant="outline"
+					size="icon-sm"
+					aria-label="Next page"
+					disabled={currentPage >= pageCount}
+					onClick={() => goToPage(currentPage + 1)}
+				>
+					<ChevronRight />
+				</Button>
+			</div>
+			<label
+				htmlFor={pageSizeId}
+				className="text-muted-foreground flex items-center gap-3 text-sm"
+			>
+				Rows per page
+				<NativeSelect
+					id={pageSizeId}
+					value={String(limit)}
+					onChange={(event) => setLimit(Number(event.target.value))}
+				>
+					{[...new Set([25, 50, 100, limit])]
+						.sort((a, b) => a - b)
+						.map((size) => (
+							<NativeSelectOption key={size} value={size}>
+								{size}
+							</NativeSelectOption>
+						))}
+				</NativeSelect>
+			</label>
+		</nav>
 	);
 };
 

@@ -69,6 +69,20 @@ describe("employee directory API", () => {
 		expect((await list({ ...query, countryCode: "IN" })).body).toMatchObject({ items: [], totalCount: 0 });
 	});
 
+	it.each([
+		[{ countryCode: "CA", status: "all" }, [3]],
+		[{ department: "Sales" }, [2]],
+		[{ jobTitle: "Director" }, [4]],
+		[{ level: "L3" }, [0, 1]],
+		[{ department: "Sales", level: "L3" }, []],
+		[{ search: "Bob", department: "Engineering" }, []],
+		[{ department: "Sales' OR 1=1 --" }, []],
+	])("applies each exact filter and their intersections: %j", async (query, indexes) => {
+		const { body } = await list(query);
+		expect(body.items.map((item: { id: string }) => item.id)).toEqual(indexes.map((index) => ids[index]));
+		expect(body.totalCount).toBe(indexes.length);
+	});
+
 	it.each(["countryCode", "department", "jobTitle", "level", "name"])("sorts %s in both directions with an id tie-breaker", async (sortBy) => {
 		for (const sortDirection of ["asc", "desc"]) {
 			const { body } = await list({ sortBy, sortDirection });

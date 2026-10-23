@@ -61,15 +61,30 @@ Checks passed: 84 server tests, 15 existing frontend tests, `pnpm ready`, and pr
 
 ## 4. Employee directory
 
-- [ ] Test server pagination, stable ordering, search, and filters for country, department, title, and level, including combined filters and no matches.
-- [ ] Test active/terminated visibility rules, total counts, and invalid query parameters.
-- [ ] Implement list and filter-option endpoints without sending the full directory to the browser.
-- [ ] Build the directory as the primary entry page, with search, filters, pagination, and links to employee details.
-- [ ] Manually verify filter changes reset pagination appropriately and displayed totals match results.
+- [x] Test server pagination, stable ordering, search, and filters for country, department, title, and level, including combined filters and no matches.
+- [x] Test active/terminated visibility rules, total counts, and invalid query parameters.
+- [x] Implement list and filter-option endpoints without sending the full directory to the browser.
+- [x] Build the directory as the primary entry page, with search, filters, pagination, and links to employee details.
+- [x] Manually verify filter changes reset pagination appropriately and displayed totals match results.
 - [ ] Measure representative list requests against 10,000 seeded employees using the agreed performance definition; optimize based on evidence.
 - [ ] Deploy this first usable slice to the VPS and verify persistent database storage.
 
 Verification: the directory navigates 10,000 employees correctly and meets the defined performance target.
+
+Directory implementation verified locally with 43 SQLite HTTP tests (127 server tests total). Manual browser checks covered active/terminated/all counts, page changes, combined filters resetting to page 1, page-size changes, empty searches, keyboard sorting, employee detail/history links, suggestions, loading, and recovery after a simulated failed request. The 390px layout keeps horizontal scrolling inside the table. Existing frontend tests remain; no new automated UI tests were added.
+
+Decision: reuse `CustomTable` with shadcn presentation and the installed TanStack Table v8. Server pagination renders 25–100 rows rather than loading the full directory; AG Grid's spreadsheet features are outside this scope. Fixed zero-result pagination, controlled sorting/page-size synchronization, and keyboard controls. Exact filters and literal substring search are parameterized SQL; sortable columns come from a fixed allowlist. Page records and total count share a read transaction. Filter options are distinct values across all statuses and also supply create-form suggestions.
+
+Local performance check, 2026-10-23: production NestJS via `pnpm --filter server build` and `start:prod`, Node v24.16.0, macOS / Apple M5 / 24 GiB RAM, isolated SQLite database with the pinned Faker seed and exactly 10,000 employees. HTTP client on the same machine, response body included, no client HTTP cache, unchanged 300/minute rate limit. Five warmups then 50 sequential requests per case; nearest-rank percentiles; zero errors. All requests used page size 25. Initial startup and browser rendering were excluded.
+
+| Query | Matching employees | p50 ms | p95 ms | Max ms |
+|---|---:|---:|---:|---:|
+| Default first page | 9,090 | 0.58 | 1.59 | 2.19 |
+| Literal name search `Aadi` | 15 | 2.03 | 2.67 | 3.05 |
+| IN + Engineering + L3 | 46 | 1.69 | 1.90 | 2.05 |
+| Page 100 | 9,090 | 0.48 | 0.66 | 0.71 |
+
+These are local baseline measurements, not the agreed deployed acceptance check. Caddy/HTTPS, VPS persistence, and production browser paint timings remain unverified; the two deployment/performance checklist items stay open pending the VPS SSH target and public hostname. Production startup checks also fixed the template's missing direct Express dependency and build output path so `start:prod` runs the compiled application.
 
 ## 5. Edit compensation and terminate employees
 

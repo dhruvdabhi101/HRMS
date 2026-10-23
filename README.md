@@ -96,7 +96,13 @@ Integration tests apply the checked-in migration SQL to temporary SQLite files a
 
 ## Employee creation and detail
 
-Open `/employees/new` to create an employee. A successful save opens `/employees/<id>` with profile details, derived annual compensation, and initial compensation history. The directory is planned for the next implementation step.
+Open `/` or `/employees` for the employee directory. Search by name, combine country/department/job title/level/status filters, sort columns, and choose 25, 50, or 100 rows per page. It defaults to active employees; changing search or filters returns to page 1. Click a name to open details, including terminated employees and their preserved history.
+
+Open `/employees/new` to create an employee. Department and job title offer existing-value suggestions and still accept new text. A successful save opens `/employees/<id>` with profile details, derived annual compensation, and initial compensation history.
+
+- `GET /api/employees` accepts `page` (default 1), `pageSize` (default 25, maximum 100), `search`, `countryCode`, `department`, `jobTitle`, `level`, `status` (`active`, `terminated`, `all`), `sortBy` (`name`, `countryCode`, `department`, `jobTitle`, `level`), and `sortDirection` (`asc`, `desc`). It returns `{ items, totalCount, page, pageSize }` without compensation history. Ordering defaults to name ascending with an ID tie-breaker. Salary amounts are labelled with local currency and are not sorted across currencies.
+- Search is a trimmed literal name substring, including `%` and `_`, using SQLite's ASCII case folding. Filters combine with AND. Positive out-of-range pages return an empty list with the correct total; invalid queries return 400 with field errors.
+- `GET /api/employees/filter-options` returns sorted distinct `departments` and `jobTitles` across all statuses. It supplies directory filters and form suggestions.
 
 - `POST /api/employees` accepts required profile fields, `hireDate` as `YYYY-MM-DD`, `annualBaseMinor` as integer local minor units, and `bonusTargetBps` as integer basis points. For example, salary 100.05 is sent as 10005 and bonus 10% as 1000.
 - Currency is derived from the supported country; a supplied currency must match. The FX table must already be seeded. Employee creation and initial history are written atomically.

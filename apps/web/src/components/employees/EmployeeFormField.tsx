@@ -21,6 +21,7 @@ interface EmployeeFormFieldProps {
 	type?: "text" | "date";
 	inputMode?: "decimal";
 	description?: string;
+	suggestions?: string[];
 }
 
 export function EmployeeFormField({
@@ -31,6 +32,7 @@ export function EmployeeFormField({
 	type = "text",
 	inputMode,
 	description,
+	suggestions,
 }: EmployeeFormFieldProps) {
 	return (
 		<Controller
@@ -64,9 +66,17 @@ export function EmployeeFormField({
 							value={field.value ?? ""}
 							id={name}
 							type={type}
+							list={suggestions ? `${name}-suggestions` : undefined}
 							inputMode={inputMode}
 							aria-invalid={fieldState.invalid}
 						/>
+					)}
+					{suggestions && (
+						<datalist id={`${name}-suggestions`}>
+							{suggestions.map((value) => (
+								<option key={value} value={value} />
+							))}
+						</datalist>
 					)}
 					{description && <FieldDescription>{description}</FieldDescription>}
 					<FieldError errors={[fieldState.error]} />

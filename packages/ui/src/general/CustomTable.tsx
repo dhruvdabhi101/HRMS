@@ -56,6 +56,7 @@ interface CustomTableProps<TData> {
 	// Sorting props
 	sortingMode?: "client" | "server";
 	onSortingChange?: (sorting: SortingState) => void;
+	sorting?: SortingState;
 
 	// Filtering props
 	filteringMode?: "client" | "server";
@@ -84,28 +85,25 @@ export function CustomTable<TData>({
 	onPaginationChange,
 	sortingMode = "client",
 	onSortingChange: externalOnSortingChange,
+	sorting: controlledSorting,
 	filteringMode = "client",
 	onFilteringChange: externalOnFilteringChange,
 	globalFilter,
 	onGlobalFilterChange,
 }: CustomTableProps<TData>) {
-	const [sorting, setSorting] = React.useState<SortingState>([]);
+	const [internalSorting, setSorting] = React.useState<SortingState>([]);
+	const sorting = controlledSorting ?? internalSorting;
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
 		[],
 	);
-	const [pagination, setPagination] = React.useState<PaginationState>({
+	const [internalPagination, setPagination] = React.useState<PaginationState>({
 		pageIndex: currentPage - 1,
-		pageSize: pageSize,
+		pageSize,
 	});
-
-	React.useEffect(() => {
-		if (
-			paginationMode === "server" &&
-			currentPage !== pagination.pageIndex + 1
-		) {
-			setPagination((prev) => ({ ...prev, pageIndex: currentPage - 1 }));
-		}
-	}, [currentPage, pagination.pageIndex, paginationMode]);
+	const pagination =
+		paginationMode === "server"
+			? { pageIndex: currentPage - 1, pageSize }
+			: internalPagination;
 
 	const handleSortingChange = (
 		updaterOrValue: SortingState | ((old: SortingState) => SortingState),
@@ -167,11 +165,10 @@ export function CustomTable<TData>({
 			...(enablePagination && { pagination }),
 			...(globalFilter !== undefined && { globalFilter }),
 		},
-		...(paginationMode === "server" &&
-			totalCount && {
-				pageCount: Math.ceil(totalCount / pagination.pageSize),
-				manualPagination: true,
-			}),
+		...(paginationMode === "server" && {
+			pageCount: Math.ceil((totalCount ?? 0) / pagination.pageSize),
+			manualPagination: true,
+		}),
 	});
 
 	const handlePageChange = (page: number) => {
@@ -185,13 +182,12 @@ export function CustomTable<TData>({
 	const handlePageSizeChange = (newPageSize: number) => {
 		if (paginationMode === "server" && onPaginationChange) {
 			onPaginationChange(1, newPageSize);
-		}
-		table.setPageSize(newPageSize);
+		} else table.setPageSize(newPageSize);
 	};
 
 	const pageCount =
-		paginationMode === "server" && totalCount
-			? Math.ceil(totalCount / pagination.pageSize)
+		paginationMode === "server"
+			? Math.ceil((totalCount ?? 0) / pagination.pageSize)
 			: table.getPageCount();
 
 	const renderTableBody = () => {
@@ -264,32 +260,45 @@ export function CustomTable<TData>({
 						{table.getHeaderGroups().map((headerGroup) => (
 							<TableRow key={headerGroup.id}>
 								{headerGroup.headers.map((header) => (
-									<TableHead key={header.id}>
-										{header.isPlaceholder ? null : (
-											<div
-												className={
-													header.column.getCanSort()
-														? "flex cursor-pointer items-center gap-2 select-none"
-														: ""
-												}
+									<TableHead
+										key={header.id}
+										aria-sort={
+											header.column.getCanSort() && enableSorting
+												? header.column.getIsSorted() === "asc"
+													? "ascending"
+													: header.column.getIsSorted() === "desc"
+														? "descending"
+														: "none"
+												: undefined
+										}
+									>
+										{header.isPlaceholder ? null : enableSorting &&
+											header.column.getCanSort() ? (
+											<button
+												type="button"
+												className="flex cursor-pointer items-center gap-2 rounded focus-visible:outline-2 focus-visible:outline-ring"
 												onClick={header.column.getToggleSortingHandler()}
 											>
 												{flexRender(
 													header.column.columnDef.header,
 													header.getContext(),
 												)}
-												{header.column.getCanSort() && enableSorting && (
-													<span className="inline-flex">
-														{header.column.getIsSorted() === "asc" ? (
-															<ArrowUp className="h-4 w-4" />
-														) : header.column.getIsSorted() === "desc" ? (
-															<ArrowDown className="h-4 w-4" />
-														) : (
-															<ArrowUpDown className="text-muted-foreground h-4 w-4" />
-														)}
-													</span>
+												{header.column.getIsSorted() === "asc" ? (
+													<ArrowUp aria-hidden="true" className="h-4 w-4" />
+												) : header.column.getIsSorted() === "desc" ? (
+													<ArrowDown aria-hidden="true" className="h-4 w-4" />
+												) : (
+													<ArrowUpDown
+														aria-hidden="true"
+														className="text-muted-foreground h-4 w-4"
+													/>
 												)}
-											</div>
+											</button>
+										) : (
+											flexRender(
+												header.column.columnDef.header,
+												header.getContext(),
+											)
 										)}
 									</TableHead>
 								))}
@@ -301,7 +310,7 @@ export function CustomTable<TData>({
 			</div>
 
 			{enablePagination &&
-				pageCount > 1 &&
+				pageCount > 0 &&
 				state !== "loading" &&
 				state !== "error" && (
 					<PaginationControls

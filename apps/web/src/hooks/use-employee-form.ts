@@ -38,6 +38,7 @@ export function useEmployeeForm() {
 			{
 				onSuccess: (employee) => {
 					cache.setQueryData(EMPLOYEE_KEYS.detail(employee.id), employee);
+					cache.invalidateQueries({ queryKey: EMPLOYEE_KEYS.all });
 					router.push(`/employees/${employee.id}`);
 				},
 				onError: (error) => {

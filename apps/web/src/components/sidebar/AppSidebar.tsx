@@ -20,7 +20,7 @@ export function AppSidebar() {
 
 	const items = [
 		{
-			label: "Dashboard",
+			label: "Employees",
 			link: "/",
 			icon: Home,
 			external: false,
