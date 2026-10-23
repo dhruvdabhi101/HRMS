@@ -12,7 +12,7 @@ Design references: [database diagram](DATABASE.md) and [application architecture
 - [ ] Refactor with tests green; repeat for the next behavior.
 - [ ] Connect the UI and manually verify the affected workflow and applicable loading, empty, error, and validation states. No new automated UI tests for now.
 - [ ] Run relevant tests and `pnpm ready`; inspect the diff for unrelated changes.
-- [ ] Commit the completed behavior with a descriptive message. For step 5, the user requested a separate failing test commit before implementation; keep later implementation commits passing.
+- [ ] Commit the completed behavior with a descriptive message. For steps 5–6, the user requested a separate failing test commit before implementation; keep later implementation commits passing.
 
 Use unit tests for isolated business calculations and integration tests with isolated SQLite databases for persistence, queries, and transactions. Prefer small fixtures with hand-calculated answers over the 10,000-row demo dataset. Avoid tests of framework wiring, trivial delegation, private implementation details, or coverage metrics alone.
 
@@ -108,13 +108,19 @@ Verification also exposed intermittent HTTP connection failures in the new test 
 
 ## 6. Filtered CSV export
 
-- [ ] Reuse directory filter logic so export includes all matching employees, independent of the visible page.
-- [ ] Test filtered record selection, column values, and explicit currency/compensation labels.
-- [ ] Test CSV escaping for commas, quotes, and newlines, and safe handling of spreadsheet formula prefixes.
-- [ ] Implement the export endpoint and download action.
-- [ ] Manually open an exported file and compare it with the active directory filters.
+- [x] Reuse directory filter logic so export includes all matching employees, independent of the visible page.
+- [x] Test filtered record selection, column values, and explicit currency/compensation labels.
+- [x] Test CSV escaping for commas, quotes, and newlines, and safe handling of spreadsheet formula prefixes.
+- [x] Implement the export endpoint and download action.
+- [x] Manually open an exported file and compare it with the active directory filters.
 
 Verification: exported records match the filtered dataset, with valid CSV formatting and safe text cells.
+
+Verified with 48 new isolated SQLite HTTP tests, committed first as `e12c691` with expected failures before implementation. CSV export reuses the directory's parameterized filter/sort builders, includes every matching employee independently of valid pagination inputs, defaults to active status, and validates malformed queries as JSON errors. Columns include all current profile fields and explicitly labelled local annual base, bonus percentage, target bonus, and annual target compensation with exact two-decimal output. Empty selections return a header-only CSV; export changes no records.
+
+Every cell is quoted with doubled embedded quotes and CRLF record separators. Formula-like text, including leading whitespace/control characters and full-width formula prefixes, receives an apostrophe; original Unicode and embedded newlines remain in a single cell. UTF-8 BOM, fixed attachment filename, and no-store headers are set on successful downloads. This is protection for the exported text; spreadsheet save/reopen behavior is application-specific and was not verified in a native spreadsheet application.
+
+Manual browser checks against a temporary 30-employee SQLite fixture verified export from page 2 includes all 28 active employees, Sales filtering exports 14 employees, empty search exports only the header, export waits for pending search/filter requests, failed downloads show an inline error and retry succeeds, and the action fits a 390px viewport. Downloaded files were opened with Python's independent CSV reader to verify row counts, fields, Unicode, quoting/newlines, BOM, and literal formula-like text. All 247 server tests and 15 existing frontend tests, `pnpm ready`, and both production builds passed. No new automated UI tests or dependencies were added.
 
 ## 7. Group-by pay explorer
 

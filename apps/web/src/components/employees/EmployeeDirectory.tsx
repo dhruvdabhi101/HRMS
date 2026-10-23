@@ -12,6 +12,7 @@ import { PageContainer } from "@repo/ui/general/PageContainer";
 import Link from "next/link";
 import { useEmployeeDirectory } from "@/hooks";
 import { EmployeeDirectoryFilters } from "./EmployeeDirectoryFilters";
+import { ExportEmployees } from "./ExportEmployees";
 import { employeeDirectoryColumns } from "./employee-directory-columns";
 
 export function EmployeeDirectory() {
@@ -35,9 +36,20 @@ export function EmployeeDirectory() {
 						Find employees and review their compensation.
 					</p>
 				</div>
-				<Link href="/employees/new" className={buttonVariants()}>
-					Add employee
-				</Link>
+				<div className="flex flex-wrap items-start gap-3">
+					<ExportEmployees
+						query={query}
+						disabled={
+							isLoading ||
+							isError ||
+							employees.isFetching ||
+							search.trim() !== (query.search ?? "")
+						}
+					/>
+					<Link href="/employees/new" className={buttonVariants()}>
+						Add employee
+					</Link>
+				</div>
 			</div>
 			<EmployeeDirectoryFilters
 				query={query}

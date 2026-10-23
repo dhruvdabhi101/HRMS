@@ -14,6 +14,9 @@ export class EmployeesService {
 			...query,
 		});
 	}
+	static exportCsv(query: EmployeeDirectoryQuery) {
+		return ApiClient.get<string>("/api/employees/export", { ...query });
+	}
 	static filterOptions() {
 		return ApiClient.get<EmployeeFilterOptions>(
 			"/api/employees/filter-options",

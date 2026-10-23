@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { PrismaModule } from "../prisma/prisma.module";
 import { EmployeeDirectoryService } from "./employee-directory.service";
+import { EmployeeExportService } from "./employee-export.service";
 import { EmployeeUpdatesService } from "./employee-updates.service";
 import { EmployeesController } from "./employees.controller";
 import { EmployeesService } from "./employees.service";
@@ -12,6 +13,7 @@ import { EmployeesService } from "./employees.service";
 		EmployeesService,
 		EmployeeDirectoryService,
 		EmployeeUpdatesService,
+		EmployeeExportService,
 	],
 })
 export class EmployeesModule {}

@@ -143,3 +143,21 @@ before implementing write test cases including edge cases like this
 : we can't update salary or bonus of terminated employee and similar edge cases.. also if similar cases are not done for the previous implemented feature.e then do so as well
 
 first implement tests.. commit those tests.. and then implement feature around it.
+
+## Prompt 12
+
+let's move to next step of the plan.. follow the same steps. 
+write tests first with edge cases and then implement..
+once done lets do overall review of the progress (code review and security review on any edge cases if we missed in implementation)
+
+$code-review 
+$security-audit
+
+## Prompt 13
+
+Which baseline should the overall code review use? The code-review skill requires a fixed starting commit. I recommend 817d38b, immediately before the salary-management implementation began.
+All implemented features since 817d38b (Recommended)
+
+## Prompt 14
+
+continue

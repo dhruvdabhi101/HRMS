@@ -42,3 +42,7 @@ export function useUpdateEmployee() {
 export function useTerminateEmployee() {
 	return useMutation({ mutationFn: EmployeesService.terminate });
 }
+
+export function useExportEmployees() {
+	return useMutation({ mutationFn: EmployeesService.exportCsv });
+}
