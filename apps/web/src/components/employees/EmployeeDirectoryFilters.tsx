@@ -12,6 +12,7 @@ import {
 } from "@repo/ui/components/native-select";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import AlertMessage from "@repo/ui/general/AlertMessage";
+import LoadingButton from "@repo/ui/general/LoadingButton";
 import { useEmployeeFilterOptions } from "@/queries";
 
 interface Props {
@@ -125,9 +126,13 @@ export function EmployeeDirectoryFilters({
 						variant="destructive"
 						message="Department and job title filters could not be loaded."
 					/>
-					<Button variant="outline" onClick={() => options.refetch()}>
+					<LoadingButton
+						variant="outline"
+						isLoading={options.isFetching}
+						onClick={() => options.refetch()}
+					>
 						Retry filters
-					</Button>
+					</LoadingButton>
 				</div>
 			)}
 		</div>

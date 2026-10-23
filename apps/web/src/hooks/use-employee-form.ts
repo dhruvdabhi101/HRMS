@@ -2,16 +2,15 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { decimalToHundredths, type EmployeeDetail } from "@repo/shared";
-import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { ApiError } from "@/lib/api-error";
-import { EMPLOYEE_KEYS, useCreateEmployee, useUpdateEmployee } from "@/queries";
+import { useCreateEmployee, useUpdateEmployee } from "@/queries";
+import { changedEmployeeFields, employeeFormField } from "@/utils";
 import { type EmployeeFormValues, employeeFormSchema } from "@/validations";
 
 export function useEmployeeForm(employee?: EmployeeDetail) {
 	const router = useRouter();
-	const cache = useQueryClient();
 	const create = useCreateEmployee();
 	const update = useUpdateEmployee();
 	const form = useForm<EmployeeFormValues>({
@@ -39,6 +38,7 @@ export function useEmployeeForm(employee?: EmployeeDetail) {
 					bonusTarget: "0",
 				},
 	});
+	const { dirtyFields } = form.formState;
 	const submit = form.handleSubmit((values) => {
 		form.clearErrors();
 		const { annualBase, bonusTarget, ...profile } = values;
@@ -49,8 +49,6 @@ export function useEmployeeForm(employee?: EmployeeDetail) {
 		};
 		const callbacks = {
 			onSuccess: (employee: EmployeeDetail) => {
-				cache.setQueryData(EMPLOYEE_KEYS.detail(employee.id), employee);
-				cache.invalidateQueries({ queryKey: EMPLOYEE_KEYS.all });
 				router.push(`/employees/${employee.id}`);
 			},
 			onError: (error: Error) => {
@@ -62,12 +60,7 @@ export function useEmployeeForm(employee?: EmployeeDetail) {
 					return;
 				}
 				for (const [field, message] of Object.entries(error.fieldErrors)) {
-					const name =
-						field === "annualBaseMinor"
-							? "annualBase"
-							: field === "bonusTargetBps"
-								? "bonusTarget"
-								: field;
+					const name = employeeFormField(field);
 					form.setError(
 						name in values ? (name as keyof EmployeeFormValues) : "root.server",
 						{ message },
@@ -75,7 +68,11 @@ export function useEmployeeForm(employee?: EmployeeDetail) {
 				}
 			},
 		};
-		if (employee) update.mutate({ id: employee.id, input }, callbacks);
+		if (employee)
+			update.mutate(
+				{ id: employee.id, input: changedEmployeeFields(input, dirtyFields) },
+				callbacks,
+			);
 		else create.mutate(input, callbacks);
 	});
 	return { form, submit, isPending: create.isPending || update.isPending };

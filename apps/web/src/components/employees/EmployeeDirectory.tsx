@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, buttonVariants } from "@repo/ui/components/button";
+import { buttonVariants } from "@repo/ui/components/button";
 import {
 	Empty,
 	EmptyDescription,
@@ -8,6 +8,7 @@ import {
 	EmptyTitle,
 } from "@repo/ui/components/empty";
 import { CustomTable } from "@repo/ui/general/CustomTable";
+import LoadingButton from "@repo/ui/general/LoadingButton";
 import { PageContainer } from "@repo/ui/general/PageContainer";
 import Link from "next/link";
 import { useEmployeeDirectory } from "@/hooks";
@@ -98,9 +99,13 @@ export function EmployeeDirectory() {
 					}
 				/>
 				{isError && (
-					<Button variant="outline" onClick={() => refetch()}>
+					<LoadingButton
+						variant="outline"
+						isLoading={employees.isFetching}
+						onClick={() => refetch()}
+					>
 						Retry employees
-					</Button>
+					</LoadingButton>
 				)}
 			</div>
 		</PageContainer>

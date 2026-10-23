@@ -1,9 +1,10 @@
 "use client";
 
-import { Button, buttonVariants } from "@repo/ui/components/button";
+import { buttonVariants } from "@repo/ui/components/button";
 import { Empty, EmptyHeader, EmptyTitle } from "@repo/ui/components/empty";
 import { Skeleton } from "@repo/ui/components/skeleton";
 import AlertMessage from "@repo/ui/general/AlertMessage";
+import LoadingButton from "@repo/ui/general/LoadingButton";
 import Link from "next/link";
 import { useBreadcrumbLabel } from "@/hooks/use-breadcrumb-label";
 import { ApiError } from "@/lib/api-error";
@@ -20,12 +21,15 @@ export function EmployeeDetail({
 	employeeId: string;
 	edit?: boolean;
 }) {
-	const { data, isPending, isError, error, refetch } = useEmployee(employeeId);
+	const { data, isPending, isFetching, isError, error, refetch } = useEmployee(
+		employeeId,
+		edit,
+	);
 	useBreadcrumbLabel(
 		employeeId,
 		data?.name ?? (isError ? "Employee" : undefined),
 	);
-	if (isPending)
+	if (isPending || (edit && isFetching))
 		return (
 			<div aria-label="Loading employee" role="status" className="space-y-6">
 				<Skeleton className="h-10 w-64" />
@@ -47,9 +51,13 @@ export function EmployeeDetail({
 						<div role="alert">
 							<AlertMessage variant="destructive" message={error.message} />
 						</div>
-						<Button variant="outline" onClick={() => void refetch()}>
+						<LoadingButton
+							variant="outline"
+							isLoading={isFetching}
+							onClick={() => void refetch()}
+						>
 							Try again
-						</Button>
+						</LoadingButton>
 					</>
 				)}
 				<Link href="/employees/new" className={buttonVariants()}>

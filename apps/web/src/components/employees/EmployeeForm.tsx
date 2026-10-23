@@ -1,7 +1,6 @@
 "use client";
 
 import { EMPLOYEE_COUNTRIES, type EmployeeDetail } from "@repo/shared";
-import { Button } from "@repo/ui/components/button";
 import { FieldLegend, FieldSet } from "@repo/ui/components/field";
 import AlertMessage from "@repo/ui/general/AlertMessage";
 import LoadingButton from "@repo/ui/general/LoadingButton";
@@ -34,13 +33,14 @@ export function EmployeeForm({ employee }: { employee?: EmployeeDetail }) {
 							variant="destructive"
 							message="Suggestions could not be loaded. You can still enter a department and job title."
 						/>
-						<Button
+						<LoadingButton
 							type="button"
+							isLoading={options.isFetching}
 							variant="outline"
 							onClick={() => options.refetch()}
 						>
 							Retry suggestions
-						</Button>
+						</LoadingButton>
 					</div>
 				)}
 				<EmployeeProfileFields
