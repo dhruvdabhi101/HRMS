@@ -1,3 +1,5 @@
+import { EMPLOYEE_LIMITS } from "@repo/shared";
+
 function requireInteger(value: number, minimum: number, maximum: number) {
 	if (!Number.isSafeInteger(value) || value < minimum || value > maximum) {
 		throw new RangeError(
@@ -28,8 +30,8 @@ export function calculateCompensation(
 	bonusTargetBps: number,
 	usdRateMicros: number,
 ) {
-	requireInteger(annualBaseMinor, 1, 1_000_000_000);
-	requireInteger(bonusTargetBps, 0, 10_000);
+	requireInteger(annualBaseMinor, 1, EMPLOYEE_LIMITS.annualBaseMinor);
+	requireInteger(bonusTargetBps, 0, EMPLOYEE_LIMITS.bonusTargetBps);
 	const bonusMinor = roundRatio(annualBaseMinor, bonusTargetBps, 10_000);
 	const targetMinor = annualBaseMinor + bonusMinor;
 	return {

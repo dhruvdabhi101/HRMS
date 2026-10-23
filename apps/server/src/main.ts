@@ -1,4 +1,3 @@
-import { BadRequestException, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 import { json, urlencoded } from "express";
@@ -6,6 +5,7 @@ import { Logger } from "nestjs-pino";
 import { AppModule } from "./app.module";
 import { config } from "./common/config";
 import { GlobalExceptionFilter } from "./common/filter/global-exception.filter";
+import { createValidationPipe } from "./common/validation.pipe";
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule, { bodyParser: false });
@@ -14,21 +14,7 @@ async function bootstrap() {
 		origin: config.urls.cors,
 		credentials: true,
 	});
-	app.useGlobalPipes(
-		new ValidationPipe({
-			exceptionFactory: (errors) => {
-				return new BadRequestException({
-					message: "Something went wrong",
-					data: errors,
-				});
-			},
-			whitelist: true,
-			transform: true,
-			transformOptions: {
-				enableImplicitConversion: false,
-			},
-		}),
-	);
+	app.useGlobalPipes(createValidationPipe());
 	app.useGlobalFilters(new GlobalExceptionFilter());
 	app.use(json({ limit: "10mb" }));
 	app.use(urlencoded({ extended: true, limit: "10mb" }));
