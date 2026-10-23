@@ -47,13 +47,17 @@ Verified locally: 10,000 employees (9,090 active / 910 terminated), 10,000 match
 
 ## 3. Create an employee and establish history
 
-- [ ] Test valid employee creation and persisted initial compensation/history according to step 1.
-- [ ] Test representative invalid inputs at the API boundary and confirm rejected requests leave no partial records.
-- [ ] Implement create/detail endpoints with server validation and clear missing-record responses.
-- [ ] Implement the create form and employee detail page using existing frontend patterns and shared components.
-- [ ] Manually create an employee, open its detail page, and confirm values and initial history.
+- [x] Test valid employee creation and persisted initial compensation/history according to step 1.
+- [x] Test representative invalid inputs at the API boundary and confirm rejected requests leave no partial records.
+- [x] Implement create/detail endpoints with server validation and clear missing-record responses.
+- [x] Implement the create form and employee detail page using existing frontend patterns and shared components.
+- [x] Manually create an employee, open its detail page, and confirm values and initial history.
 
 Verification: valid creation works end to end; invalid creation cannot persist inconsistent data.
+
+Verified with isolated SQLite HTTP tests: create/detail contracts, required fields, compensation bounds, no numeric-string coercion, valid date-only hire dates, country/currency mapping, unknown IDs, and rollback when initial history fails. Manual browser checks used a separate temporary database: field validation, country configuration errors, retry after a failed save, preserved inputs on network failure, successful navigation and exact compensation display, loading skeletons, missing employees, and narrow layout. No new automated UI tests were added. Directory browsing and existing-value suggestions follow in step 4; editing and termination follow in step 5.
+
+Checks passed: 84 server tests, 15 existing frontend tests, `pnpm ready`, and production builds for both apps.
 
 ## 4. Employee directory
 

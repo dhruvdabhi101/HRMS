@@ -94,6 +94,15 @@ Integration tests apply the checked-in migration SQL to temporary SQLite files a
 
 ---
 
+## Employee creation and detail
+
+Open `/employees/new` to create an employee. A successful save opens `/employees/<id>` with profile details, derived annual compensation, and initial compensation history. The directory is planned for the next implementation step.
+
+- `POST /api/employees` accepts required profile fields, `hireDate` as `YYYY-MM-DD`, `annualBaseMinor` as integer local minor units, and `bonusTargetBps` as integer basis points. For example, salary 100.05 is sent as 10005 and bonus 10% as 1000.
+- Currency is derived from the supported country; a supplied currency must match. The FX table must already be seeded. Employee creation and initial history are written atomically.
+- `GET /api/employees/:id` returns the saved employee and compensation history, or 404 for an unknown UUID. Salary fields remain in local currency.
+- Validation failures return 400 with a message and `fieldErrors` keyed by input field. The form displays these inline and retains entered values when a save fails.
+
 ## Rate Limiting
 
 All API routes are rate-limited globally via [`@nestjs/throttler`](https://docs.nestjs.com/security/rate-limiting). `ThrottlerGuard` is registered as an `APP_GUARD` in `apps/server/src/app.module.ts`, so every controller inherits the limit unless you opt out.

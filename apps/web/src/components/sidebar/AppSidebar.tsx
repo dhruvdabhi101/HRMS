@@ -9,7 +9,7 @@ import {
 	SidebarMenuItem,
 	SidebarRail,
 } from "@repo/ui/components/sidebar";
-import { BookOpen, GalleryVerticalEnd, Home } from "lucide-react";
+import { BookOpen, GalleryVerticalEnd, Home, UserPlus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { APP_NAME } from "@/constants";
@@ -23,6 +23,12 @@ export function AppSidebar() {
 			label: "Dashboard",
 			link: "/",
 			icon: Home,
+			external: false,
+		},
+		{
+			label: "Add employee",
+			link: "/employees/new",
+			icon: UserPlus,
 			external: false,
 		},
 		{

@@ -40,3 +40,8 @@ are we having correct path
 DATABASE_URL=file:../../packages/db/prisma/dev.db
 
 this is the db url that i'm using as of now
+
+## Prompt 6
+
+Okay got it. now lets move onto 3rd step of the [PLAN.md](docs/PLAN.md) 
+I've check the db. and everything looks correct.

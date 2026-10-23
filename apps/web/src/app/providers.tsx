@@ -15,6 +15,8 @@ import { ReactQueryClientProvider } from "@/lib/tanstack-query";
  * Dynamic segments (IDs, slugs) are registered per-page via `useBreadcrumbLabel`.
  */
 const BREADCRUMB_LABELS: BreadcrumbLabels = {
+	employees: "Employees",
+	new: "Add employee",
 	settings: "Settings",
 	users: "Users",
 	dashboard: "Dashboard",

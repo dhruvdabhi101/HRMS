@@ -2,6 +2,7 @@ import { deepTrim } from "@repo/shared";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios, { isAxiosError } from "axios";
 import { envConfig } from "@/config";
+import { ApiError } from "./api-error";
 
 export class ApiClient {
 	static async request<T>(config: AxiosRequestConfig): Promise<T> {
@@ -28,7 +29,11 @@ export class ApiClient {
 			return response.data;
 		} catch (err) {
 			if (isAxiosError(err)) {
-				throw new Error(err.response?.data.message || "Something went wrong");
+				throw new ApiError(
+					err.response?.data.message || "Something went wrong",
+					err.response?.status,
+					err.response?.data.fieldErrors,
+				);
 			}
 			console.log(err);
 			throw new Error("Something went wrong");
